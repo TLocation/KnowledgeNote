@@ -22,11 +22,6 @@ public class SpottedLinearLayout extends LinearLayout {
 
     public SpottedLinearLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
         paint = new Paint();
         paint.setColor(Color.GREEN);
         paint1 = new Paint();
@@ -35,10 +30,15 @@ public class SpottedLinearLayout extends LinearLayout {
         paint2.setColor(Color.RED);
         paint3 = new Paint();
         paint3.setColor(Color.MAGENTA);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+
         canvas.drawCircle(300, 300, 10, paint);
         canvas.drawCircle(400, 350, 22, paint1);
         canvas.drawCircle(500, 450, 50, paint2);
         canvas.drawCircle(700, 600, 35, paint3);
-
     }
 }

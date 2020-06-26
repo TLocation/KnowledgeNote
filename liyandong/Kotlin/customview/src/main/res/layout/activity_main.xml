@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.example.customview.auxiliaryView
+    <com.example.customview.AuxiliaryView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         tools:ignore="MissingConstraints" />
