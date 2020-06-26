@@ -1,1 +1,2 @@
-include ':lesson', ':app', ':base'
+include ':lesson', ':app', ':base', ':objectAnimator'
+include ':customview'

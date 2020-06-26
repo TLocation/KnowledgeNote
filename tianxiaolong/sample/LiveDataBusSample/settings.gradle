@@ -1,0 +1,2 @@
+rootProject.name='LiveDataBusSample'
+include ':app'

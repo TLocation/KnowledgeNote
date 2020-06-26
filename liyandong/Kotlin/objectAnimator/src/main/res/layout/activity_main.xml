@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnStart4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scale "
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/btnStart3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="translation "
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="148dp" />
+
+            <Button
+                android:id="@+id/btnStart2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rotation "
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="73dp" />
+
+            <Button
+                android:id="@+id/btnStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:text="alpha "
+                tools:ignore="MissingConstraints" />
+
+            <Button
+                android:id="@+id/btnStart5"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:text="btnStart "
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorAccent"
+                android:padding="10dp"
+                android:text="Hello World!"
+                android:textColor="#ffffff"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="157dp"
+                tools:layout_editor_absoluteY="157dp" />
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#acfd25"
+                android:padding="10dp"
+                android:text="Hello World!"
+                android:textColor="#ffffff"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="157dp"
+                tools:layout_editor_absoluteY="232dp" />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#f36052"
+                android:padding="10dp"
+                android:text="Hello World!"
+                android:textColor="#ffffff"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="157dp"
+                tools:layout_editor_absoluteY="82dp" />
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:text="Hello World!"
+                android:textColor="#ffffff"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="157dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <com.example.objectanimatordemo.FallingBallImageView
+                android:id="@+id/tv5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/ic_launcher" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
