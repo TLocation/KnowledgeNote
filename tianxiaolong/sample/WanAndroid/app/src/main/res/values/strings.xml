@@ -1,0 +1,4 @@
+<resources>
+	<string name="app_name">WanAndroid</string>
+    <string name="btn_lifycycle_sample">打开LifycycleSmaple</string>
+</resources>
