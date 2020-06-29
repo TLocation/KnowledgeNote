@@ -1,3 +1,4 @@
+include ':customviewmemorysample'
 rootProject.name='WanAndroid'
 include ':app'
 include ':jetpacksample'

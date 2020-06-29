@@ -13,7 +13,7 @@ import androidx.lifecycle.OnLifecycleEvent
  */
 interface LocationListener:LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate()
+    fun onActivityCreate()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart()

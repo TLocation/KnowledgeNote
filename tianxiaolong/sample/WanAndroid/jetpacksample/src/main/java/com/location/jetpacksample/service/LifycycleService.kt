@@ -8,15 +8,22 @@ import android.graphics.PixelFormat
 import android.os.Binder
 import android.os.IBinder
 import android.provider.Settings
+import android.util.LruCache
 import android.view.*
 import android.view.View.OnTouchListener
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.location.base.debugLog
 import com.location.jetpacksample.LocationListener
+import org.w3c.dom.NodeList
+import java.util.*
+import kotlin.collections.HashSet
+import kotlin.random.Random
 
 
 /**
@@ -26,6 +33,8 @@ import com.location.jetpacksample.LocationListener
  * description：
  */
 class LifycycleService : Service(),LocationListener {
+    private  var cacheData: ActitivData? = null
+    private  var cacheCount = 0
     private  var addView = false
     private val windowManager: WindowManager by lazy { getSystemService(Context.WINDOW_SERVICE) as WindowManager }
     private val layoutParams: WindowManager.LayoutParams by lazy {
@@ -36,7 +45,7 @@ class LifycycleService : Service(),LocationListener {
             flags =
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
             width = 500
-            height = 100
+            height = 600
             x = 0
             y = 0
         }
@@ -62,33 +71,64 @@ class LifycycleService : Service(),LocationListener {
         return LifycycleBinder()
     }
 
-    fun setState(msg:String){
+    fun setState(msg:String,key:Int){
+        if(cacheData == null){
+            cacheData = ActitivData(msg)
+            cacheCount+=1
+        }else{
+             if(cacheCount==5){
+                 cacheData = cacheData?.next
+                 var tempCache:ActitivData = cacheData!!.next!!
+                 while (tempCache.next!=null){
+                     tempCache = tempCache.next!!
+                 }
+                 tempCache.next = ActitivData(msg)
+
+             }else{
+                 var tempData:ActitivData = cacheData!!
+                 while (tempData.next!=null){
+                     tempData = tempData.next!!
+                 }
+                 tempData.next = ActitivData(msg)
+                 cacheCount+=1
+             }
+        }
         val textView = button.getChildAt(0) as TextView
-        textView.text = msg
+        val builder = StringBuilder()
+        var tempData = cacheData
+        while (tempData!=null){
+            builder.append(tempData.msg!!).append("\r\n")
+            tempData = tempData.next
+        }
+
+
+        textView.text = builder.toString()
     }
-    override fun onCreate() {
-        super.onCreate()
-        setState("onCreate")
+
+
+    override fun onActivityCreate() {
+        debugLog("onCreate")
+        setState("onCreate",1)
     }
 
     override fun onStart() {
-        setState("onStart")
+        setState("onStart",2)
     }
 
     override fun onResume() {
-        setState("onResume")
+        setState("onResume",3)
     }
 
     override fun onPause() {
-        setState("onPause")
+        setState("onPause",4)
     }
 
     override fun onStop() {
-        setState("onStop")
+        setState("onStop",5)
     }
 
     override fun onActivityDestroy() {
-        setState("onActivityDestroy")
+        setState("onActivityDestroy",6)
     }
 
 

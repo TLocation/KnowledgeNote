@@ -1,6 +1,9 @@
 package com.location.base
 
+import android.content.res.Resources
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 
 /**
  *
@@ -17,3 +20,7 @@ fun Any.debugLog(msg: String) {
 fun Any.releaseLog(msg: String) {
     Log.i(TAG, "[$msg]")
 }
+
+private val displayMetrics: DisplayMetrics? = Resources.getSystem().displayMetrics
+
+fun Float.dp2px() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, displayMetrics)
