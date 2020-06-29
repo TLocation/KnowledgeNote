@@ -46,6 +46,13 @@ public class PracticeView extends View {
     private RectF rectF2;
     private RectF rectF3;
     private Rect rect;
+    private PathEffect pathEffect;
+    private Shader shaderGrad;
+    private Shader shaderLinear;
+    private Shader shader;
+    private Shader shaderBitmap;
+    private ColorFilter lightingColorFilter;
+    private BlurMaskFilter blurMaskFilter;
 
     public PracticeView(Context context) {
         super(context);
@@ -70,6 +77,26 @@ public class PracticeView extends View {
         mPaintOne.setStrokeWidth(10f);
         path = new Path();
         bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.cat1);
+        pathEffect = new DashPathEffect(new float[]{20, 10, 5, 10}, 0);
+
+        //设置扫描渐变
+        shaderGrad = new SweepGradient(970, 100, Color.parseColor("#E91E63"),
+                Color.parseColor("#2196F3"));
+        rect = new Rect(400, 50, 600, 250);
+        rectF3 = new RectF(100, 400, 500, 800);
+        //线性渐变
+        shaderLinear = new LinearGradient(400, 10, 500, 200, Color.parseColor("#E91E63"),
+                Color.parseColor("#2196F3"), Shader.TileMode.CLAMP);
+        //给paint设置辐射渐变
+        rectF2 = new RectF(600, 50, 800, 100);
+        shader = new RadialGradient(800, 70, 100, Color.parseColor("#E91d63"),
+                Color.parseColor("#21D6F3"), Shader.TileMode.CLAMP);
+        //用bitmap来给图形着色
+        shaderBitmap = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        //给图片模拟简单的光照效果的。
+        lightingColorFilter = new LightingColorFilter(0xffffff, 0x003000);
+        //设置图片模糊效果
+        blurMaskFilter = new BlurMaskFilter(50, BlurMaskFilter.Blur.NORMAL);
     }
 
     public PracticeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -81,17 +108,14 @@ public class PracticeView extends View {
         super.onDraw(canvas);
         canvas.drawColor(Color.BLUE); //绘制蓝色
         canvas.drawPoints(pointFloat, mPaint); //绘制点
-        PathEffect pathEffect = new DashPathEffect(new float[]{20, 10, 5, 10}, 0);
         mPaint.setPathEffect(pathEffect); //设置用虚线来绘制线条
         canvas.drawLines(lineFloat, mPaint); //绘制线
 
-        //设置扫描渐变
-        Shader shaderGrad = new SweepGradient(970, 100, Color.parseColor("#E91E63"),
-                Color.parseColor("#2196F3"));
+
         mPaintOne.setShader(shaderGrad);
         canvas.drawCircle(950, 100, 100, mPaintOne); //绘制圆
 
-        rectF3 = new RectF(100, 400, 500, 800);
+
         mPaint.setColor(Color.GRAY);
         mPaint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(rectF3, mPaint);// 绘制背景矩形
@@ -103,11 +127,9 @@ public class PracticeView extends View {
         mPaint.setShadowLayer(10, 0, 0, Color.GREEN);  //给字体设置底部阴影效果
         canvas.drawText("hello", 200, 600, mPaint);
 
-        rect = new Rect(400, 50, 600, 250);
+
         mPaint.setStyle(Paint.Style.FILL);
-        //线性渐变
-        Shader shaderLinear = new LinearGradient(400, 10, 500, 200, Color.parseColor("#E91E63"),
-                Color.parseColor("#2196F3"), Shader.TileMode.CLAMP);
+
         mPaint.setShader(shaderLinear);
         canvas.drawRect(rect, mPaint); //绘制矩形
 
@@ -117,23 +139,18 @@ public class PracticeView extends View {
         //mPaint.setColor(Color.BLACK);
         //canvas.drawRect(rect, mPaint);
 
-        //给paint设置辐射渐变
-        rectF2 = new RectF(600, 50, 800, 100);
-        Shader shader = new RadialGradient(800, 70, 100, Color.parseColor("#E91d63"),
-                Color.parseColor("#21D6F3"), Shader.TileMode.CLAMP);
+
         mPaint.setShader(shader);
         canvas.drawOval(rectF2, mPaint); //绘制椭圆
 
-        //用bitmap来给图形着色
-        Shader shaderBitmap = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
         mPaint.setShader(shaderBitmap);
-        //给图片模拟简单的光照效果的。
-        ColorFilter lightingColorFilter = new LightingColorFilter(0xffffff, 0x003000);
+
         mPaint.setColorFilter(lightingColorFilter);
         canvas.drawCircle(750, 600, 200, mPaint);
 
-        //设置图片模糊效果
-        mPaint.setMaskFilter(new BlurMaskFilter(50, BlurMaskFilter.Blur.NORMAL));
+
+        mPaint.setMaskFilter(blurMaskFilter);
         canvas.drawBitmap(bitmap, 100, 900, mPaint); //绘制图片
 
         //绘制path
