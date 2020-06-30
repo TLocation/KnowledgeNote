@@ -4,9 +4,9 @@ MySql 在执行查询的时候一般情况下 只会用到一个索引 一条sql
 ```
 
 ####性能分析思路
-##1.首先需要使用【慢查询日志】功能，去获取所有查询时间比较长的sql语句。
-##2.其次【查看执行计划】查看有问题的sql的执行计划。
-##3.最后可以使用【show profile[s]】查看有问题的sql的性能使用情况。
+###1.首先需要使用【慢查询日志】功能，去获取所有查询时间比较长的sql语句。
+###2.其次【查看执行计划】查看有问题的sql的执行计划。
+###3.最后可以使用【show profile[s]】查看有问题的sql的性能使用情况。
 
 
 ####mysql索引
@@ -47,8 +47,10 @@ MySql 在执行查询的时候一般情况下 只会用到一个索引 一条sql
 
 
 ###索引存储结构
-#B树 和 B+树
+###B树 和 B+树
+```
 B树3层可以存bigint类型10亿条
+```
 ```
 B树：非叶子节点和叶子节点都会存储数据
 B+树：只有叶子节点会存数据 ，非叶子节点不存数据只存指针
@@ -86,6 +88,21 @@ name 非唯一索引 ---- 辅助索引(可以有多个)
 	(最左匹配   需进行测试)
 	
 	1 = 1 索引优化就抛弃了  不是很好的写法
+	
+假如：建表语句
+  create table user{
+	id int primary key, -- 主键
+	name varchar(100),
+	age int,
+	sex char(1),
+	address varchar(100)
+  };
+  
+  -- 创建组合索引   
+  -- 注意！:这里name属性值是varchar类型的字段长度是100，但是在创建 索引的时候name指定长度是10，
+			这是使用了前缀索引这个概念。 前缀索引跟多针对字符串，假如说一个字符串特别长用他进行等值匹配
+			特别不靠谱，一般情况都是用字符串的前面几个进行匹配。(具体这个长度有一个字段区分度，由区分度去选则)
+  alter table user add index idx_name_age(name(10),age);
 
 
 
@@ -116,5 +133,98 @@ name 非唯一索引 ---- 辅助索引(可以有多个)
 
 ```
 
+#########查看执行计划
+##### 在我们查询语句的前面加上 explain  他会出来执行计划
+####例如： explain select * from user;
+```
+查询出来的计划的参数字段：
+id:				关联查询会用到多个表，多个表是有顺序的。顺序用id来标识
+select_type:	每一个表的查询类型。(子查询呢，还是联合查询呢，还是.......)
+table：			执行的时候走的那个表
+partitions：	匹配分区
+type:			连接类型
+possible_keys:	查询中可能用到的索引
+key：			本次查询中所用到的索引
+ref：			连接的时候用那个字段进行连接的
+rows：			显示一共扫描多少行
+filtered：		表示此次查询条件过滤数据的百分比
+extra：			前面的信息体现不出来的都会在这个里面体现出来
 
+```
+```
+参数字段：重点
+select_type
+
+type:显示的是单位查询连接类型或者是显示类型
+	访问性能依次是 从好--差：system --> const --> eq_ref --> ref --> fulltext --> ref_or_null --> unique_subquery --> index_subquery --> range --> index_merge --> index --> ALL
+(*除了ALL其它type类型 都可以用到索引)
+(*index_merge之外，其它的type类型只可以用到一个索引)
+
+system:表中只有一行数据或者是空表
+const：使用唯一或主键索引的时候，并且长度的值是一个常量。select * from user where id = 1 ; id 是主键，id类型是int的长度固定就是4.
+eq_ref:针对唯一索引
+ref:针对非唯一索引
+range:使用>,<,null,between,in,like 后模糊 等运算符的查询
+index：(跟where没啥关系，更多的就是对结果的索引覆盖)查询的数据没有进行条件搜索，是在索引树上直接取的。 比如：select sex from uesr; sex 是非唯一索引
+all:全表扫描，就是主键索引里面所有的表数据
+
+extra：
+	using index : 用到了索引覆盖
+	using where ：
+
+
+
+
+```
+```
+有索引的都会在innodb存储引擎进行过滤
+其次剩下的
+去mysql server层进行
+
+在mysql 5.6版本之后ICP 索引下推
+
+```
+
+####索引失效
+```
+1.最好是全值
+2.最左前缀法则
+3.不要在索引上做任何操作(计算，函数，类型转换) 会导致索引失效
+4.索引范围右边的列用不到
+5.尽量使用覆盖索引(只查询所有的列)，减少select *
+6.!= 或者 <> 无法使用索引
+7.is null ,is not null 无法使用索引
+8.like  %开头会变成全表扫描索引失效。(但是索引覆盖的情况他是会走索引的)
+9.字符串不加单引号 索引失效
+10.少用or，用or连接索引会失效
+
+
+````
+
+
+####数据量大   分区 分表 分库
+##########  性能优化
+```
+1、服务器层面的优化
+	*设置足够大的innodb_buffer_pool_size(设置缓存池的大小)将数据读取到内存中。
+	  innodb_buffer_pool_size设置总内存大小的3/4或者4/5.
+	*怎样确定innodb_buffer_pool_size足够大，数据是从内存读取而不是硬盘？
+	  show global status like 'innodb_buffer_pool_pages_%';
+	  
+2、内存预热
+
+
+3、降低磁盘写入次数
+	*对于生产环境来说，很多日志不需要开启，比如:通用查询日志，慢查询日志，错误日志
+	*使用足够量打的写入缓存：innodb_log_file_size
+	  推荐innodb_log_file_size 设置为  1/4 * innodb_log_file_size
+
+	*设置合适的innodb_flush_log_at_trx_commit,和日志落盘有关
+4、提高磁盘读写
+	*ssd硬盘，虚考虑成本
+	
+
+```
+
+######
 
