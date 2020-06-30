@@ -1,4 +1,4 @@
-package com.location.jetpacksample
+package com.location.base
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver

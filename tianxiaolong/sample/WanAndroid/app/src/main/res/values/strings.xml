@@ -1,4 +1,5 @@
 <resources>
 	<string name="app_name">WanAndroid</string>
     <string name="btn_lifycycle_sample">打开LifycycleSmaple</string>
+    <string name="open_settings">打开配置管理器</string>
 </resources>

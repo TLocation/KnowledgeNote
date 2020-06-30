@@ -1,9 +1,8 @@
-package com.location.jetpacksample
+package com.location.base
 
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import com.location.base.BaseActivity
 
 
 /**

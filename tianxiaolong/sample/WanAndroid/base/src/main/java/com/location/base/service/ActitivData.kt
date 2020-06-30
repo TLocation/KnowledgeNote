@@ -1,4 +1,4 @@
-package com.location.jetpacksample.service
+package com.location.base.service
 
 /**
  *

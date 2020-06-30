@@ -1,4 +1,4 @@
-package com.location.jetpacksample.service
+package com.location.base.service
 
 import android.app.Service
 import android.content.Context
@@ -8,22 +8,13 @@ import android.graphics.PixelFormat
 import android.os.Binder
 import android.os.IBinder
 import android.provider.Settings
-import android.util.LruCache
 import android.view.*
 import android.view.View.OnTouchListener
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.util.lruCache
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
+import com.location.base.LocationListener
 import com.location.base.debugLog
-import com.location.jetpacksample.LocationListener
-import org.w3c.dom.NodeList
-import java.util.*
-import kotlin.collections.HashSet
-import kotlin.random.Random
 
 
 /**
@@ -32,7 +23,8 @@ import kotlin.random.Random
  * time：2020/6/28 21:54
  * description：
  */
-class LifycycleService : Service(),LocationListener {
+class LifycycleService : Service(), LocationListener {
+    private  var name:String = "Main"
     private  var cacheData: ActitivData? = null
     private  var cacheCount = 0
     private  var addView = false
@@ -71,7 +63,8 @@ class LifycycleService : Service(),LocationListener {
         return LifycycleBinder()
     }
 
-    fun setState(msg:String,key:Int){
+    fun setState(temp:String,key:Int){
+      val   msg = "$temp"
         if(cacheData == null){
             cacheData = ActitivData(msg)
             cacheCount+=1
@@ -148,6 +141,9 @@ class LifycycleService : Service(),LocationListener {
 
     public  inner  class LifycycleBinder :Binder(){
         fun getLifycycleOberver():LifecycleObserver = this@LifycycleService
+        fun setName(msg:String){
+            this@LifycycleService.name = msg
+        }
     }
     inner class FloatingOnTouchListener : OnTouchListener {
         private var x = 0
