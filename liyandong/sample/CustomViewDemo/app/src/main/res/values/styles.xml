@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyCustomViewDefStyleAttrImpl">
+        <item name="custom_attr1">attr1_defStyleAttr</item>
+        <item name="custom_attr2">attr2_defStyleAttr</item>
+        <item name="custom_attr3">attr3_defStyleAttr</item>
+    </style>
+
 </resources>
