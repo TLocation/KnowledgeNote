@@ -8,6 +8,7 @@ select ---> from ---> where ---> group by ---> having  ---> order by  ---> limit
 
 
 ####获取当前日期
+```
 SELECT NOW(),CURDATE(),CURTIME()
 
 获取前一天
@@ -15,6 +16,19 @@ SELECT  DATE_SUB(CURDATE(),INTERVAL 1 DAY);
 
 获取后一天
 SELECT  DATE_SUB(CURDATE(),INTERVAL -1 DAY);
+
+根据录入日期获取当月最后一天
+select LAST_DAY(20200316)
+
+根据录入日期获取当月第一天一天
+select first_day(20200316)
+
+-- 根据录入日期得到周一
+select subdate('20200611',weekday('20200611')); 
+
+-- 根据录入日期得到周天
+select subdate('20200611',weekday('20200611')-6);
+
 
 年份差
 SELECT TIMESTAMPDIFF(YEAR,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
@@ -26,22 +40,25 @@ SELECT TIMESTAMPDIFF(MONTH,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 （1）SELECT datediff(DATE_FORMAT(now(), '%Y-%m-%d'),DATE_FORMAT('2018-09-10','%Y-%m-%d'))
 （2）SELECT TIMESTAMPDIFF(DAY,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 
+```
 ####sql 在 ...  和 ...  之间 (between ... and ...)
 ####查询 入职时间在 2019-08-09 和 2020-03-04 之间的人员数据  >=2019-08-09 和 <=2020-03-04
+```
 select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
-
+```
 
 
 ####update 用and 连接错误用法
+```
 表: a     b      c
     1     1      2
 
 例如：1>、update 表 set a = 2 and b = 2 where c = 2; 结果：a = 0 , b = 1;
       2>、update 表 set a = 2 and b = 1 where c = 2; 结果：a = 1 , b = 1;
-
+```
 
 ####常用函数的使用
-    
+```   
 	select version()     -- 当前数据库版本
     select DATABASE()    -- 当前库
     select user()        -- 当前用户
@@ -117,7 +134,7 @@ select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
 
 	select str_to_date(‘2014-04-22 15:47:06’,’%Y-%m-%d %H:%i:%s’)
 
-
+```
 ####case when 使用：
 ```
 1:case 判断字段 
@@ -220,19 +237,13 @@ select floor(23.4)   ------ 23
 ```
 
 
-####根据录入日期得到日期所在的周一和周天
-```
--- 得到周一
-select subdate('20200611',weekday('20200611')); 
-
--- 得到周天
-select subdate('20200611',weekday('20200611')-6);
-
-
-```
-
 
 #########多表关联
+###等值连接
+```
+
+
+```
 
 
 
