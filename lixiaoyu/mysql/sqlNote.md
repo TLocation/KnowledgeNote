@@ -1,6 +1,6 @@
-#####按照年代分类  sql分为92和99  推荐99
-#####SQL92仅仅支持内连接 就是多表关联用逗号连接
-#####SQL99 支持  内连接 + 外连接(左外和右外不支持全外) + 交叉连接
+###按照年代分类  sql分为92和99  推荐99
+####SQL92仅仅支持内连接 就是多表关联用逗号连接
+####SQL99 支持  内连接 + 外连接(左外和右外不支持全外) + 交叉连接
 
 ####sql执行顺序
 select ---> from ---> where ---> group by ---> having  ---> order by  ---> limit
@@ -94,6 +94,9 @@ select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
 	
 	//mod():取余  同java中的%。 mod(a,b)  a-a/b*b
 	
+	//count(字段)： 统计该字段非空值的个数
+	//count(*):   统计结果集的行数
+	
 	//now():当前日期时间  
 	//curdate():当前日期不包括时间
 	//curtime():当前时间不包括日期
@@ -135,6 +138,17 @@ select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
 	select str_to_date(‘2014-04-22 15:47:06’,’%Y-%m-%d %H:%i:%s’)
 
 ```
+### 加密函数
+```
+select password(字符串);
+
+select md5(字符串);
+
+```
+
+
+
+
 ####case when 使用：
 ```
 1:case 判断字段 
@@ -238,14 +252,130 @@ select floor(23.4)   ------ 23
 
 
 
-#########多表关联
-###等值连接
+## 多表关联
+### 等值连接   内连接   SQL99 inner join
+
+```
+SQL92：
+
+例如：select 
+		a.id,a.name,a.age,a.sex,b.class 
+	from 
+		Student a,Classes b 
+	where 
+		a.id = b.id; 
+	[有筛选条件:where 条件;]
+
+```
+
+```
+SQL99：
+
+例如：select 
+		a.id,a.name,a.age,a.sex,b.class 
+	from 
+		Student a 
+	inner join 
+		Classes b 
+	on
+		a.id = b.id; 
+	[有筛选条件:where 条件;]
+
+
 ```
 
 
+### 非等值连接
+
+```
+SQL92:
+
+例如：select 
+		a.id,a.name,a.age,a.sex,b.class 
+	from 
+		Student a,Classes b 
+	where 
+		between a.id and b.id； 
+
 ```
 
+```
+SQL99:
 
+例如：select 
+		a.id,a.name,a.age,a.sex,b.class 
+	from 
+		Student a
+	inner join
+		Classes b 
+	on 
+		between a.id and b.id； 
+
+```
+
+### 自连接
+
+```
+SQL92:
+
+例如: 假如说同一张表里面 有id   pid是id的上级，想查询id 对应的它的上级的编号和名字
+	select 
+		a.id,a.name,b.id,b.name
+	from 
+		Student a,Student b
+    where a.id = b.pid;		
+
+```
+
+```
+SQL99:
+
+例如: 假如说同一张表里面 有id   pid是id的上级，想查询id 对应的它的上级的编号和名字
+	select 
+		a.id,a.name,b.id,b.name
+	from 
+		Student a
+	inner join
+		Student b
+    on
+		a.id = b.pid;		
+
+```
+
+### 外连接   一般的应用场景就是查询：一个表中有，另一个表中没有的数据
+>外连接查询 =  内连接结果 + 主表中有而从表中没有的数据(null)；
+>>left join 左连接 左边是主表
+
+
+>>right join 右连接 右边是主表
+
+
+>>pull 全外连接 = 内连接结果 + 表1中有表2中没有 + 表2中有表1中没有   （mysql不支持）
+
+###交叉连接 cross join
+
+
+## 子查询  出现在其他语句中的select语句   叫做子查询或者是内查询
+>子查询出现的位置
+>>select 后面
+>>>支持标量子查询
+
+>>from 后面
+>>>支持表子查询
+
+>>where 或者是having后面
+>>>支持标量子查询
+>>>支持列子查询
+>>>支持行子查询
+
+>>exists后面
+>>>支持表子查询
+
+>案结果集行列不同
+>>标量子查询(结果集只有一行一列)
+>>列子查询(结果集只有一列多行)
+>>行子查询(结果集有一行多列)
+>>表子查询(结果集一般为多行多列)
 
 
 
