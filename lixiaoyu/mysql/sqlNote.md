@@ -197,6 +197,22 @@ union all：两个表的数据全部展示
 如果需要展示不同的数据比如count只有一条数据:就可以使用union 或者 union all
 (表的别名一定要不同 否则数据有问题)
 
+应用场景：要查询的结果来自于多个表，并且并且多个表没有直接的连接关系，但是查询的数据是一致的。
+
+特点：
+	1、要求多条查询语句的查询列数是一致的。
+	2、要求多条查询语句查询的列数是一致的。
+	3、union默认是去重，union all 可以包含重复项
+	
+案例：查询每个国家的人数的总个数
+   select concat(*) as '个数',name as '国家' from  country where name = '中国'
+   union
+   select concat(*),name from  country where name = '美国'
+   union
+   select concat(*),name from  country where name = '韩国'
+   
+   
+
 ```
 ####group by 使用
 ```
@@ -359,23 +375,147 @@ SQL99:
 >子查询出现的位置
 >>select 后面
 >>>支持标量子查询
+```
+案例：查询每个班级的学生个数
+select a.*,(select count(*) from student where id = a.pid) where class a ;
+
+
+```
 
 >>from 后面
 >>>支持表子查询
+```
+案例:查询每个员工的工资和所在的班级
+select 
+	a.money,c.name
+from 
+	(select money a,id b from laagent ) la
+inner join 
+     class c
+on
+    c.pid = la.b
+
+
+
+```
+
 
 >>where 或者是having后面
 >>>支持标量子查询
 >>>支持列子查询
 >>>支持行子查询
+```
+1、子查询放在小括号内
+2、子查询一般放在条件右侧
+3、标量子查询 一般搭配单行操作符使用(>  <  >=  <=  <>)
+	①：标量子查询
+		案例：查询 谁的工资比tom高；
+		select *  from  laagent where money  > (select money from laagnt where name = 'tom')
+		案例：查询工资最少的人  工号，姓名，工资
+		select id ,name ,money where money = (select min(money) from laagent);
+	②：列子查询
+		any 和some 一样： where a > any(11,22,33) 只要大于其中任意一个就行
+		all:    where  a  > all（11,22,33）  必须大于all里面的所有
+		
+		案例：查询 工资是 2000 和 6000的员工的信息
+		select * from laagent where money in (2000,6000);
+						或者是
+		select * from laagent where money = any(2000,6000); -- 等于其中的任意一个
+		
+		案例：查询工资在 2000 或者 6000 的 员工
+		select * from laagent where money any (2000,6000);
+	③：行子查询(结果集一行多列 或者是 多行多列)
+		案例：查询员工编号最小 并且工资最高的员工
+		select *  from  laagent where id  = (select min(id) from laagent) and money =(select max(money) from  laagent);
+		或者
+		select *  from  laagent where (id,money)  = (select min(id),max(money) from laagent);
+		
+		
+```
 
->>exists后面
+>>exists后面 存在返回1   不存在返回0
 >>>支持表子查询
+```
+案例：查询不在班级101 的学生信息
+select *  from  laagent a where  nont exists (select 1 from class where pid = a.id and cla = 101);
+
+```
+
+
 
 >案结果集行列不同
 >>标量子查询(结果集只有一行一列)
 >>列子查询(结果集只有一列多行)
 >>行子查询(结果集有一行多列)
 >>表子查询(结果集一般为多行多列)
+
+## DML 语言   数据操作语言(增删改)
+### 增
+```
+1.insert into 表 (id,name,age,sex)values('1','李夏雨','22','女');
+
+2.insert into 表 set id = '1',name = '李夏雨';
+
+3.insert into 表(id,name,age,sex)values('1','李夏雨','22','女')，('2','李夏雨2','22','女')，('3','李夏雨3','22','女')；
+
+4.insert into 表(id,name,age,sex) select id,name,age,sex from laagent;
+
+```
+### 改
+```
+
+>单表
+
+1.update 表 set name = '',age = '' where id = '';
+
+>多表
+
+2.udpate 表1 a,表2 b set 列 = '' where 连接条件 and 筛选条件
+
+3.udpate 表1 a inner|left|right join 表2 b on 连接条件 set  列= ''  where  筛选条件
+
+
+```
+
+### 删   如果有自增列  用delete删除的话再添加 从断点处自增，但是 用truncate 刪除 自增列从1开始
+```
+>单表
+1.delete from 表 where id = '';
+
+2.truncate table 表; 不能加where条件  执行 就整个表全部删除了
+
+>多表   delete那个表就删那个表
+1.delete 表1 from 表1 a,表2 b where  连接条件  and 筛选条件
+
+2.delete 表1 from 表1 a inner|left|right join  表2 b on 连接条件 where 筛选条件
+
+```
+
+
+## DDL语言   数据定义语言(库和表的管理)
+>创建*create*     修改*alter*   删除*drop*
+### 库的管理
+```
+创建：create database '库名';  //默认创建在data文件夹下
+	  create database if not exists '库名'; //如果有这个库名了就不创建
+
+修改：rename database '库名' to '新库名';  //因为不安全 已经不能使用
+
+	alter  database '库名' character set gbk;  // 改变库的字符集
+
+删除：drop database '库名'; //删除库
+    drop database if not exists '库名'; //如果存在就删除库
+
+
+```
+
+### 表的创建
+
+
+
+
+
+
 
 
 
