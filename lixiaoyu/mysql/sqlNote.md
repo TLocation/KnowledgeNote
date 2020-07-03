@@ -449,6 +449,26 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 >>行子查询(结果集有一行多列)
 >>表子查询(结果集一般为多行多列)
 
+## 分页 limit
+```
+1、limit 语句放在查询语句的最后
+
+2、select *  from  表 limit 0,5;  -- 0 从下标为0的开始 也就是第一条数据。5 是一页显示5条
+公式： 页数page , 每页的条数size   select * from 表 limit (page-1)*size,size;   
+	例如:每页10条，找第8页
+	limit （8-1）*10,10；
+
+
+```
+
+
+
+
+
+
+
+
+
 ## DML 语言   数据操作语言(增删改)
 ### 增
 ```
@@ -511,6 +531,70 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 
 ### 表的创建
 
+```
+create table 表名{
+	列名 列的类型【(长度)约束】,
+	列名 列的类型【(长度)约束】,
+	列名 列的类型【(长度)约束】,
+	列名 列的类型【(长度)约束】,
+	.....
+	列名 列的类型【(长度)约束】
+}
+
+例如：create table Book{  //创建book表
+		id int, #编号
+		bname varchar(20),#图书名
+		price double,#价格
+		authorid int,#作者编号
+		publishdate datetime #出版日期
+	  
+	  }
+	  create table Author{  //创建作者表
+		id int, #编号
+		auname varchar(20),#作者名名
+		nation varchar(20) #国籍
+	  }
+
+```
+### 表的修改
+```
+基本语法: alter table 表名 add|drop|modify|change column 列名 【列名类型，约束】
+```
+
+
+>修改列名
+```
+alter table book change column publishdate pubdate datetime;
+```
+
+>修改列的类型/约束
+```
+alter table book modify column pubdate timestamp;
+```
+
+>添加新列
+```
+alter table author add column annual double;
+```
+
+
+>删除列
+```
+alter table author drop colum annual;
+```
+
+
+>修改表名
+```
+alter table author rename to book_author;
+```
+
+### 表的删除
+```
+drop table book;
+
+drop table if exists book;   -- 如果存在就删除
+```
 
 
 
