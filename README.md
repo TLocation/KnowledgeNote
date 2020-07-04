@@ -18,7 +18,7 @@
 
 #### Jetpack
 
-[Lifecycle使用文档(个人分支)](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/lifecycle.md)
+[Lifecycle使用文档(个人分支)](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/lifeycycle.md)
 
 [Lifycycle源码分析](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/jetpack/lifecycleSourceCode.md)
 
