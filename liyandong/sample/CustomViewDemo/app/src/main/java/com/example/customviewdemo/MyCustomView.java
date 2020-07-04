@@ -20,16 +20,11 @@ public class MyCustomView extends View {
     private Rect bounds;
 
     public MyCustomView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MyCustomView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        paint = new Paint();
-
-        paint.setStyle(Paint.Style.FILL);
-        path = new Path();
-        bounds = new Rect();
+        this(context, attrs, 0);
     }
 
     public MyCustomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -44,7 +39,10 @@ public class MyCustomView extends View {
         Log.e("MyCustomView---", "MyCustomView: " + attr3);
         Log.e("MyCustomView---", "MyCustomView: " + attr4);
         typedArray.recycle();
-
+        paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        path = new Path();
+        bounds = new Rect();
     }
 
     @Override
@@ -101,14 +99,5 @@ public class MyCustomView extends View {
             path.close();
             canvas.drawPath(path, paint);
         }
-
-//        path.moveTo(200, 820);
-//        path.lineTo(300, 820);
-//        path.lineTo(380, 900);
-//        path.lineTo(300, 980);
-//        path.lineTo(200, 980);
-//        path.lineTo(120, 900);
-//        path.close();
-//        canvas.drawPath(path, paint);
     }
 }
