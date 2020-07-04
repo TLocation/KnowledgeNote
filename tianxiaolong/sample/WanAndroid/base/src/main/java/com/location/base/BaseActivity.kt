@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.location.base.service.LifycycleService
 
 /**
@@ -24,6 +25,10 @@ fun AppCompatActivity.toast(msg:String){
 
 inline  fun <reified T:Activity> AppCompatActivity.startUiActivity(){
   startActivity(Intent(this,T::class.java))
+}
+
+inline  fun <reified  T:Activity> Fragment.startUiActivity(){
+    startActivity(Intent(requireContext(),T::class.java))
 }
 abstract class BaseActivity :AppCompatActivity() {
     private  var isBinding = false

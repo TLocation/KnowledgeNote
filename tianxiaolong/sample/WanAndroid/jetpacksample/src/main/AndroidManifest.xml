@@ -3,5 +3,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 <application>
     <activity android:name=".lifycycle.LifecycleActivity"/>
+    <activity android:name=".livedata.LiveDataActivity"/>
+    <activity android:name=".livedata.LiveDataExtendActivity"/>
 </application>
 </manifest>

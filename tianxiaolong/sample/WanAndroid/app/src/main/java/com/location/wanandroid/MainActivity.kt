@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import com.location.base.*
 import com.location.jetpacksample.lifycycle.LifecycleActivity
+import com.location.jetpacksample.livedata.LiveDataActivity
 import com.location.wanandroid.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
@@ -17,6 +18,9 @@ class MainActivity : BaseActivity() {
         }
         inflate.mainOpenSettings.setOnClickListener {
             startUiActivity<SettingsActivity>()
+        }
+        inflate.mainOpenLivedata.setOnClickListener {
+            startUiActivity<LiveDataActivity>()
         }
     }
 }
