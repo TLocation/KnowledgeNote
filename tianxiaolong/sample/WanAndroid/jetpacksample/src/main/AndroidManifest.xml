@@ -2,6 +2,6 @@
     package="com.location.jetpacksample" >
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 <application>
-    <activity android:name=".LifycycleActivity"/>
+    <activity android:name=".lifycycle.LifecycleActivity"/>
 </application>
 </manifest>

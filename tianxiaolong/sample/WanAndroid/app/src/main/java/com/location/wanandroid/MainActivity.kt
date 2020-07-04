@@ -1,10 +1,9 @@
 package com.location.wanandroid
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.location.base.*
-import com.location.jetpacksample.LifycycleActivity
+import com.location.jetpacksample.lifycycle.LifecycleActivity
 import com.location.wanandroid.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
@@ -14,7 +13,7 @@ class MainActivity : BaseActivity() {
         val inflate = ActivityMainBinding.inflate(LayoutInflater.from(this))
         setContentView(inflate.root)
         inflate.mainOpenLufycycle.setOnClickListener {
-              startUiActivity<LifycycleActivity>()
+              startUiActivity<LifecycleActivity>()
         }
         inflate.mainOpenSettings.setOnClickListener {
             startUiActivity<SettingsActivity>()

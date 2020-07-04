@@ -7,10 +7,18 @@
 	android:orientation="vertical"
 	tools:context=".MainActivity">
 	<Button
+		android:textAllCaps="false"
 		android:id="@+id/main_open_lufycycle"
 		android:text="@string/btn_lifycycle_sample"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"/>
+	<Button
+		android:textAllCaps="false"
+		android:id="@+id/main_open_livedata"
+		android:text="@string/btn_livedata_sample"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
 	<Button
 		android:id="@+id/main_open_settings"
 		android:text="@string/open_settings"

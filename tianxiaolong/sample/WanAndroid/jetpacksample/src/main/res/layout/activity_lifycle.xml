@@ -3,10 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/lifycycle_bth"
-        android:text="@string/open_float_window"
+    <TextView
+        android:text="Lifecycle是一个可以监测Activity/Fragment生命周期的jetpack组件，这样可以更有利于写出更条理、更精简的代码。"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

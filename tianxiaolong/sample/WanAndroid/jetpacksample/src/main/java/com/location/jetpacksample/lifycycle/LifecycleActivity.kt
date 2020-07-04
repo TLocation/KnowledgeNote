@@ -1,16 +1,10 @@
-package com.location.jetpacksample
+package com.location.jetpacksample.lifycycle
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.view.LayoutInflater
 import com.location.base.JetpackBaseActivity
 import com.location.base.toast
 import com.location.jetpacksample.databinding.ActivityLifycleBinding
-import com.location.base.service.LifycycleService
 
 /**
  *
@@ -18,7 +12,7 @@ import com.location.base.service.LifycycleService
  * time：2020/6/28 21:41
  * description：
  */
-class LifycycleActivity : JetpackBaseActivity() {
+class LifecycleActivity : JetpackBaseActivity() {
 
 
 
@@ -27,10 +21,11 @@ class LifycycleActivity : JetpackBaseActivity() {
         super.onCreate(savedInstanceState)
         val inflate = ActivityLifycleBinding.inflate(LayoutInflater.from(this))
         setContentView(inflate.root)
-        inflate.lifycycleBth.setOnClickListener {
-
-
-        }
+        //注册生命周期回调
+        lifecycle.addObserver(LifecycleOwnerImpl())
+        //注册生命周期事件回调
+        lifecycle.addObserver(LifecycleEventImpl())
+        UserManager.register(this)
 
     }
 

@@ -12,13 +12,12 @@ import android.util.TypedValue
  * description：
  */
 const val TAG = "WanAndroid"
-
 fun Any.debugLog(msg: String) {
-    if (BuildConfig.DEBUG) Log.d(TAG, "[$msg]")
+    if (BuildConfig.DEBUG) Log.d(TAG, "[${javaClass.simpleName}]:[$msg]")
 }
 
 fun Any.releaseLog(msg: String) {
-    Log.i(TAG, "[$msg]")
+    Log.i(TAG, "[${javaClass.simpleName}]:[$msg]")
 }
 
 private val displayMetrics: DisplayMetrics? = Resources.getSystem().displayMetrics
