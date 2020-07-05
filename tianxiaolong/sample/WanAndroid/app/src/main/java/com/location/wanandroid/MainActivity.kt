@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import com.location.base.*
 import com.location.jetpacksample.lifycycle.LifecycleActivity
 import com.location.jetpacksample.livedata.LiveDataActivity
+import com.location.jetpacksample.viewmodel.ViewModelActivity
 import com.location.wanandroid.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
@@ -21,6 +22,10 @@ class MainActivity : BaseActivity() {
         }
         inflate.mainOpenLivedata.setOnClickListener {
             startUiActivity<LiveDataActivity>()
+        }
+        inflate.mainOpenViewmodel.setOnClickListener {
+
+            startUiActivity<ViewModelActivity>()
         }
     }
 }

@@ -5,5 +5,6 @@
     <activity android:name=".lifycycle.LifecycleActivity"/>
     <activity android:name=".livedata.LiveDataActivity"/>
     <activity android:name=".livedata.LiveDataExtendActivity"/>
+    <activity android:name=".viewmodel.ViewModelActivity"/>
 </application>
 </manifest>
