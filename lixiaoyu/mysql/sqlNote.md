@@ -1,13 +1,13 @@
-###按照年代分类  sql分为92和99  推荐99
-####SQL92仅仅支持内连接 就是多表关联用逗号连接
-####SQL99 支持  内连接 + 外连接(左外和右外不支持全外) + 交叉连接
+### 按照年代分类  sql分为92和99  推荐99
+#### SQL92仅仅支持内连接 就是多表关联用逗号连接
+#### SQL99 支持  内连接 + 外连接(左外和右外不支持全外) + 交叉连接
 
-####sql执行顺序
+#### sql执行顺序
 select ---> from ---> where ---> group by ---> having  ---> order by  ---> limit
 
 
 
-####获取当前日期
+#### 获取当前日期
 ```
 SELECT NOW(),CURDATE(),CURTIME()
 
@@ -41,23 +41,29 @@ SELECT TIMESTAMPDIFF(MONTH,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 （2）SELECT TIMESTAMPDIFF(DAY,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 
 ```
-####sql 在 ...  和 ...  之间 (between ... and ...)
-####查询 入职时间在 2019-08-09 和 2020-03-04 之间的人员数据  >=2019-08-09 和 <=2020-03-04
+
+#### sql 在 ...  和 ...  之间 (between ... and ...)
+#### 查询 入职时间在 2019-08-09 和 2020-03-04 之间的人员数据  >=2019-08-09 和 <=2020-03-04
+
 ```
 select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
+
 ```
 
 
-####update 用and 连接错误用法
+#### update 用and 连接错误用法
+
 ```
 表: a     b      c
     1     1      2
 
 例如：1>、update 表 set a = 2 and b = 2 where c = 2; 结果：a = 0 , b = 1;
       2>、update 表 set a = 2 and b = 1 where c = 2; 结果：a = 1 , b = 1;
+	  
 ```
 
-####常用函数的使用
+#### 常用函数的使用
+
 ```   
 	select version()     -- 当前数据库版本
     select DATABASE()    -- 当前库
@@ -138,7 +144,8 @@ select *   from  laagent where employdate between '2019-08-09' and  '2020-03-04'
 	select str_to_date(‘2014-04-22 15:47:06’,’%Y-%m-%d %H:%i:%s’)
 
 ```
-### 加密函数
+## 加密函数
+
 ```
 select password(字符串);
 
@@ -149,7 +156,8 @@ select md5(字符串);
 
 
 
-####case when 使用：
+#### case when 使用：
+
 ```
 1:case 判断字段 
   when 常量1 then 值 
@@ -168,7 +176,8 @@ select md5(字符串);
   end;
 ```
 
-####if...else....
+#### if...else....
+
 ```
 1、if 判断条件1 then
       值;
@@ -187,7 +196,8 @@ select md5(字符串);
    end if;
 ```
 
-####union 和 union all 
+#### union 和 union all 
+
 ```
 
 union:两个表都有的数据(就是union all取出冗余的数据)
@@ -214,7 +224,8 @@ union all：两个表的数据全部展示
    
 
 ```
-####group by 使用
+#### group by 使用
+
 ```
 group by :select  分组函数(avg,max,count,sum,min)
           from  表
@@ -225,6 +236,7 @@ group by :select  分组函数(avg,max,count,sum,min)
 ```
 
 #### exists 和 not exists
+
 ```
 -- 表stud1中 存在 stud1中name 和 stud2 中name相等数据的
 select *  from stud1 a where exists (select 1 from stud2 b  where a.name = b.name)
@@ -238,6 +250,7 @@ select *  from stud2 a where not exists (select 1 from stud1 b  where a.name = b
 ```
 
 #### cast(属性值 as 数据类型)  用来转换类型
+
 ```
 可以转换的类型是有限制的。这个类型可以是以下值其中的一个：
 
@@ -252,7 +265,8 @@ select *  from stud2 a where not exists (select 1 from stud1 b  where a.name = b
 
 ```
 
-####向上取整:ceiling()    向下取整:floor()      返回最接近的函数:ROUND(23.3222,3)
+#### 向上取整:ceiling()    向下取整:floor()      返回最接近的函数:ROUND(23.3222,3)
+
 ```
 select ceiling(23.4) -----  24
 
@@ -269,6 +283,7 @@ select floor(23.4)   ------ 23
 
 
 ## 多表关联
+
 ### 等值连接   内连接   SQL99 inner join
 
 ```
@@ -359,32 +374,44 @@ SQL99:
 ```
 
 ### 外连接   一般的应用场景就是查询：一个表中有，另一个表中没有的数据
+
 >外连接查询 =  内连接结果 + 主表中有而从表中没有的数据(null)；
->>left join 左连接 左边是主表
+
+```
+
+left join 左连接 左边是主表
 
 
->>right join 右连接 右边是主表
+right join 右连接 右边是主表
 
 
->>pull 全外连接 = 内连接结果 + 表1中有表2中没有 + 表2中有表1中没有   （mysql不支持）
+pull 全外连接 = 内连接结果 + 表1中有表2中没有 + 表2中有表1中没有   （mysql不支持）
+```
 
 ###交叉连接 cross join
 
 
 ## 子查询  出现在其他语句中的select语句   叫做子查询或者是内查询
->子查询出现的位置
->>select 后面
->>>支持标量子查询
+### 子查询出现的位置
+
+>select 后面
+
 ```
+
+支持标量子查询
+
+
 案例：查询每个班级的学生个数
 select a.*,(select count(*) from student where id = a.pid) where class a ;
 
 
 ```
 
->>from 后面
->>>支持表子查询
+>from 后面
+
 ```
+支持表子查询
+
 案例:查询每个员工的工资和所在的班级
 select 
 	a.money,c.name
@@ -400,11 +427,15 @@ on
 ```
 
 
->>where 或者是having后面
->>>支持标量子查询
->>>支持列子查询
->>>支持行子查询
+>where 或者是having后面
+
+
 ```
+支持标量子查询
+支持列子查询
+支持行子查询
+
+
 1、子查询放在小括号内
 2、子查询一般放在条件右侧
 3、标量子查询 一般搭配单行操作符使用(>  <  >=  <=  <>)
@@ -433,9 +464,11 @@ on
 		
 ```
 
->>exists后面 存在返回1   不存在返回0
->>>支持表子查询
+>exists后面 存在返回1   不存在返回0
+
 ```
+支持表子查询
+
 案例：查询不在班级101 的学生信息
 select *  from  laagent a where  nont exists (select 1 from class where pid = a.id and cla = 101);
 
@@ -444,12 +477,18 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 
 
 >案结果集行列不同
->>标量子查询(结果集只有一行一列)
->>列子查询(结果集只有一列多行)
->>行子查询(结果集有一行多列)
->>表子查询(结果集一般为多行多列)
+
+```
+
+标量子查询(结果集只有一行一列)
+列子查询(结果集只有一列多行)
+行子查询(结果集有一行多列)
+表子查询(结果集一般为多行多列)
+
+```
 
 ## 分页 limit
+
 ```
 1、limit 语句放在查询语句的最后
 
@@ -460,11 +499,6 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 
 
 ```
-
-
-
-
-
 
 
 
@@ -482,13 +516,19 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 
 ```
 ### 改
-```
+
 
 >单表
 
+```
+
 1.update 表 set name = '',age = '' where id = '';
 
+```
+
 >多表
+
+```
 
 2.udpate 表1 a,表2 b set 列 = '' where 连接条件 and 筛选条件
 
@@ -498,13 +538,21 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 ```
 
 ### 删   如果有自增列  用delete删除的话再添加 从断点处自增，但是 用truncate 刪除 自增列从1开始
-```
+
 >单表
+
+```
+
 1.delete from 表 where id = '';
 
 2.truncate table 表; 不能加where条件  执行 就整个表全部删除了
 
+```
+
 >多表   delete那个表就删那个表
+
+```
+
 1.delete 表1 from 表1 a,表2 b where  连接条件  and 筛选条件
 
 2.delete 表1 from 表1 a inner|left|right join  表2 b on 连接条件 where 筛选条件
@@ -513,8 +561,11 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 
 
 ## DDL语言   数据定义语言(库和表的管理)
+
 >创建*create*     修改*alter*   删除*drop*
+
 ### 库的管理
+
 ```
 创建：create database '库名';  //默认创建在data文件夹下
 	  create database if not exists '库名'; //如果有这个库名了就不创建
@@ -555,45 +606,61 @@ create table 表名{
 		nation varchar(20) #国籍
 	  }
 
+
 ```
+
 ### 表的修改
+
 ```
 基本语法: alter table 表名 add|drop|modify|change column 列名 【列名类型，约束】
+
 ```
 
 
 >修改列名
+
 ```
 alter table book change column publishdate pubdate datetime;
+
 ```
 
 >修改列的类型/约束
+
 ```
 alter table book modify column pubdate timestamp;
+
 ```
 
 >添加新列
+
 ```
 alter table author add column annual double;
+
 ```
 
 
 >删除列
+
 ```
 alter table author drop colum annual;
+
 ```
 
 
 >修改表名
+
 ```
 alter table author rename to book_author;
+
 ```
 
 ### 表的删除
+
 ```
 drop table book;
 
 drop table if exists book;   -- 如果存在就删除
+
 ```
 
 
