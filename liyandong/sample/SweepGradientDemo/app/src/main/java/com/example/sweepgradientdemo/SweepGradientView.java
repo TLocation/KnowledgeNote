@@ -1,6 +1,7 @@
 package com.example.sweepgradientdemo;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,6 +30,12 @@ public class SweepGradientView extends View {
 
     public SweepGradientView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        //获取自定义属性
+        TypedArray typeAttr = context.obtainStyledAttributes(attrs, R.styleable.SweepGradientView);
+        String name = typeAttr.getString(R.styleable.SweepGradientView_name);
+        //获取style
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SweepGradientView, defStyleAttr, 0);
+        String styleName = typedArray.getString(R.styleable.SweepGradientView_name);
         paint = new Paint();
         paint.setStrokeWidth(5f);
         paint.setStyle(Paint.Style.FILL);
