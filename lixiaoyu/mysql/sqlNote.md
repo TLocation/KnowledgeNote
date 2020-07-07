@@ -663,9 +663,72 @@ drop table if exists book;   -- 如果存在就删除
 
 ```
 
+### 仅仅复制表的结构
+
+```
+
+create table 新表 like 复制的表
+
+```
+
+### 复制表结构 + 数据
+
+```
+create table 新表 select *  from  复制的表
+
+```
+
+## 常见的数据类型
+
+```
+数值型：
+		整形：			  字节
+			tinyint			1		
+			smallint		2
+			meditmint		3
+			int,integer		4
+			bigin			8
+			1、如果不设置无符号，默认有符号。设置有符号 unsigned.  符号就是指 负数
+			2、如果插入的数据超出了整形的范围，会报out of range 异常，并且插入的是临界值
+			3、如果不设置长度会有默认的长度
+		小数：
+			定点型：dec(m,d)
+					decimal(m,d)
+			浮点型：
+					float(m,d)		4
+					double(m,d)		8
+					m代表整数部位+小数部位
+					d小数部位
+					m,d都可以省略，如果是decimal,则m默认为10，d默认为0
+								   如果是float和double会根据数值的精度来确定精度
+
+字符型：
+		较短的文本：
+					char 				耗费空间         效率高
+					varchar				比较节省空间	 效率低
+		较长的文本：text  blob(较长的二进制数据)
+		
+		枚举：enum
+			例如：crate table student{
+						aa enum('a','b','c','d','e')
+				  }
+				  insert into student values('a')
+				  insert into student values('b')
+				  insert into student values('v')
+				  insert into student values('d')
+				  insert into student values('e')
+				  结果就是第三行是空的  因为 enum，只能插入固定的值
+				  
+
+日期型：
+		date 			4		日期
+		datetime		8		日期 时间
+		timestamp		4		当前时区的日期 时间
+		time			3		时间
+		year			1		年
 
 
-
+```
 
 
 
