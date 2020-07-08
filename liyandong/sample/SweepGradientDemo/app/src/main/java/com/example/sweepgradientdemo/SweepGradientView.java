@@ -39,6 +39,8 @@ public class SweepGradientView extends View {
         paint = new Paint();
         paint.setStrokeWidth(5f);
         paint.setStyle(Paint.Style.FILL);
+        typeAttr.recycle();
+        typedArray.recycle();
     }
 
     @Override
