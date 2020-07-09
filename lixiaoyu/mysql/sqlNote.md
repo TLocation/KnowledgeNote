@@ -36,6 +36,9 @@ SELECT TIMESTAMPDIFF(YEAR,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 月份差
 SELECT TIMESTAMPDIFF(MONTH,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
 
+根据年月获取到月份差
+select PERIOD_DIFF('202004',DATE_FORMAT(now(), '%Y%m'))
+
 天数差
 （1）SELECT datediff(DATE_FORMAT(now(), '%Y-%m-%d'),DATE_FORMAT('2018-09-10','%Y-%m-%d'))
 （2）SELECT TIMESTAMPDIFF(DAY,'2017-05-01', DATE_FORMAT(now(), '%Y-%m-%d'))
@@ -728,6 +731,45 @@ create table 新表 select *  from  复制的表
 		year			1		年
 
 
+```
+
+## 约束 ：一种限制，用于限制表中的数据为了保证表中的数据的准确和可靠性
+
+```
+六大约束：
+		not null:非空
+		default：默认，用于保证该字段有默认值
+		primary key：主键约束  保证字段具有唯一性，并且非空
+		unique:唯一，保证字段唯一 可以为空
+		check：检查约束（mysql中不支持）
+		foreign key：外键约束，用于限制2个表的关系
+		
+		列级约束：
+		例如:create table student{
+				id int primary key, -- 主键
+				name varchar(20) not null,非空
+				seat int ubique,-- 唯一约束
+				age int default 18,-- 默认约束 默认18
+				pid int foreign key references 表2(id) -- 外键
+			}
+		
+					
+		主键约束> 保证唯一      不允许为空       主键只允许一个
+		
+		
+		唯一约束> 保证唯一      只允许一个为空    多个    
+
+		外键：1.要求在从表设置外键关系
+			  2.从表外键类型要和主表匹配字段类型一致
+			  3.主表关联列必须是一个key（主键或者是唯一）
+			  4.插入数据先插主表，再插从表
+			    删除先删从表
+				
+				
+自增长列：1.必须是一个key
+		  2.一个表只能有一个标识列
+		  3.标识列的类型之能是数值型
+		  4.标识列 可以通过手动插入值设置起始值，还可以设置步长来配置。set increment_increment = 3;
 ```
 
 
