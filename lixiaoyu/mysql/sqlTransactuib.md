@@ -37,6 +37,16 @@ innodb  存储引擎支持事务，其他都不支持
 
 显示的事务：事务具有明显的开启和结束的标志。
 	前提是必须先设置自动提交功能为禁用。
+
+
+关于事务的一些术语
+
+    开启事务：Start Transaction
+    事务结束：End Transaction
+    提交事务：Commit Transaction
+    回滚事务：Rollback Transaction
+
+
 	
 	1.开启事务
 	set autocommit = 0;
@@ -46,6 +56,7 @@ innodb  存储引擎支持事务，其他都不支持
 		rollback;回滚
 		
 	案例:set autocommit = 0;
+		 start transaction; -- 开启事务
 		 update biao set name = 'lelele' where id = 11;
 		 delete from biao where id = 22;
 		 commit;
@@ -53,12 +64,13 @@ innodb  存储引擎支持事务，其他都不支持
 		 
 		 回滚: name = lixiaoyu,biao id 22 存在
 		 set autocommit = 0;
+		 start transaction;  -- 开启事务
 		 update biao set name = 'lelele' where id = 11;
 		 delete from biao where id = 22;
 		 rollback;
 		 因为是回滚，所以数据不改变 还是原来的数据
 
-
+start transaction;??
 
 ```
 
@@ -74,19 +86,77 @@ innodb  存储引擎支持事务，其他都不支持
 		就不同了 。
 		
 幻读：例如有2个事务a，b。a从表内读了一个字段是2行，然后b在这个表中插入了一些新的行，如果a再
-      次读取如同一个表，就会出现多行数据。
+      次读取如同一个表，就会出现多行数据。(针对插入insert)
 	  
 
 ```
+
+>查看隔离级别
+
+```
+
+select @@tx_isolation;
+
+```
+
 
 >如果去避免上面这些并发问题  设置隔离级别
 
 ```
 
+隔离级别：					脏读           不重复读				幻读
+	1.read uncmmitted:		  √				  √                   √
+	
+	2.reade committed:        ×               √                   √
+	
+	3.repeatable read:        ×               ×                   √
+	
+	4.serializable:           ×               ×                   ×
+
+mysql中默认repeatable read 隔离级别。
+oracle中默认read committed；
+
+
+
+set session | global transaction isolation level .....;
+1.设置当前mysql连接的隔离级别：
+
+	set transaction isolation level .......;   (...为隔离级别)
+
+
+2.设置数据库系统的全局隔离级别(重启才有效)
+
+	set global transaction isolation level .....; (....为隔离级别)
+	
+
+
+```
+
+>回滚  saveplint
+
+```
+例如：
+	set autocommit = 0;
+	start transaction;
+	delete from  biao where id = 20;
+	savepoint a;  -- 设置一个节点名
+	delete from  biao  where id = 28;
+	rollback to a; -- 回滚到保存点
+	
+	select *  from biao ; 结果就是没有20的数据 有28的数据
+	
+
+
 
 
 
 ```
+
+
+
+
+
+
 
 
 
