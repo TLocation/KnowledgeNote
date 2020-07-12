@@ -1,5 +1,6 @@
 package com.location.jetpacksample.viewmodel
 
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
