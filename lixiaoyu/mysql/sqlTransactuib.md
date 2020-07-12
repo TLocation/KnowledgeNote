@@ -135,6 +135,7 @@ set session | global transaction isolation level .....;
 >回滚  saveplint
 
 ```
+
 例如：
 	set autocommit = 0;
 	start transaction;
@@ -145,11 +146,6 @@ set session | global transaction isolation level .....;
 	
 	select *  from biao ; 结果就是没有20的数据 有28的数据
 	
-
-
-
-
-
 ```
 
 
