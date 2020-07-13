@@ -8,7 +8,9 @@ select ---> from ---> where ---> group by ---> having  ---> order by  ---> limit
 
 
 #### 获取当前日期
+
 ```
+获得当前日期
 SELECT NOW(),CURDATE(),CURTIME()
 
 获取前一天
@@ -712,9 +714,9 @@ create table 新表 select *  from  复制的表
 		较长的文本：text  blob(较长的二进制数据)
 		
 		枚举：enum
-			例如：crate table student{
+			例如：crate table student(
 						aa enum('a','b','c','d','e')
-				  }
+				  )
 				  insert into student values('a')
 				  insert into student values('b')
 				  insert into student values('v')
@@ -745,13 +747,13 @@ create table 新表 select *  from  复制的表
 		foreign key：外键约束，用于限制2个表的关系
 		
 		列级约束：
-		例如:create table student{
+		例如:create table student(
 				id int primary key, -- 主键
 				name varchar(20) not null,非空
-				seat int ubique,-- 唯一约束
+				seat int unique,-- 唯一约束
 				age int default 18,-- 默认约束 默认18
 				pid int foreign key references 表2(id) -- 外键
-			}
+			)
 		
 					
 		主键约束> 保证唯一      不允许为空       主键只允许一个
@@ -771,6 +773,7 @@ create table 新表 select *  from  复制的表
 		  3.标识列的类型之能是数值型
 		  4.标识列 可以通过手动插入值设置起始值，还可以设置步长来配置。set increment_increment = 3;
 ```
+
 
 
 
