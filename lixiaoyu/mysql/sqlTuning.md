@@ -61,8 +61,8 @@ MySql 在执行查询的时候一般情况下 只会用到一个索引 一条sql
 
 
 
+### 索引使用（待测试）
 
-###索引使用（待测试）
 ```
 
 ```
@@ -101,8 +101,10 @@ name 非唯一索引 ---- 辅助索引(可以有多个)
 ## 组合索引    创建的顺序特别重要   （创建顺序的选择也是优化的目标）
 
 >创建下面这个组合索引，相当于创建了c1,c1 c2 ,c1 c2 c3  3个索引
+>
+>AL RABLE 'table_name' ADD INDEX index_name('c1','c2','c3')
 
-**AL RABLE 'table_name' ADD INDEX index_name('c1','c2','c3')
+
 
 ```
 
@@ -124,19 +126,19 @@ c是范围查询，
 ```
 
 >(最左匹配   需进行测试)
-	
+
 >1 = 1 索引优化就抛弃了  不是很好的写法
 
 ```
 	
 假如：建表语句
-  create table user{
+  create table user(
 	id int primary key, -- 主键
 	name varchar(100),
 	age int,
 	sex char(1),
 	address varchar(100)
-  };
+  );
   
   -- 创建组合索引   
   -- 注意！:这里name属性值是varchar类型的字段长度是100，但是在创建 索引的时候name指定长度是10，
@@ -174,7 +176,7 @@ c是范围查询，
 
 
 ## 查看执行计划
-*在我们查询语句的前面加上 ***explain***  他会出来执行计划*
+*在我们查询语句的前面加上 ***explain***  他会出来执行计划
 ```
 
 例如： explain select * from user;
@@ -256,7 +258,7 @@ c是范围查询，
 >1、服务器层面的优化
 >>设置足够大的innodb_buffer_pool_size(设置缓存池的大小)将数据读取到内存中。 innodb_buffer_pool_size设置总内存大小的3/4或者4/5.
 >>怎样确定innodb_buffer_pool_size足够大，数据是从内存读取而不是硬盘？ show global status like 'innodb_buffer_pool_pages_%';
-	  
+
 >2、内存预热
 
 
@@ -267,7 +269,7 @@ c是范围查询，
 >>设置合适的innodb_flush_log_at_trx_commit,和日志落盘有关
 >4、提高磁盘读写
 >>ssd硬盘，虚考虑成本
-	
+
 
 
 

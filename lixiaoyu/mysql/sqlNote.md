@@ -393,7 +393,14 @@ right join 右连接 右边是主表
 pull 全外连接 = 内连接结果 + 表1中有表2中没有 + 表2中有表1中没有   （mysql不支持）
 ```
 
-###交叉连接 cross join
+### 交叉连接 cross join
+
+```
+
+
+```
+
+
 
 
 ## 子查询  出现在其他语句中的select语句   叫做子查询或者是内查询
@@ -588,28 +595,28 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 ### 表的创建
 
 ```
-create table 表名{
+create table 表名(
 	列名 列的类型【(长度)约束】,
 	列名 列的类型【(长度)约束】,
 	列名 列的类型【(长度)约束】,
 	列名 列的类型【(长度)约束】,
 	.....
 	列名 列的类型【(长度)约束】
-}
+)
 
-例如：create table Book{  //创建book表
+例如：create table Book(  //创建book表
 		id int, #编号
 		bname varchar(20),#图书名
 		price double,#价格
 		authorid int,#作者编号
 		publishdate datetime #出版日期
 	  
-	  }
-	  create table Author{  //创建作者表
+	 )
+	  create table Author(  //创建作者表
 		id int, #编号
 		auname varchar(20),#作者名名
 		nation varchar(20) #国籍
-	  }
+	  )
 
 
 ```

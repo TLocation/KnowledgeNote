@@ -100,3 +100,201 @@
 
 
 ```
+
+
+
+## 存储过程和函数
+
+```
+存储过程和函数就类似于java中的方法。
+好处：
+	1.提高代码的重用
+	2.简化操作
+```
+
+
+
+### 存储过程
+
+> 含义:一组预先编译好的sql语句的集合。
+>
+> ```
+> 1.提高代码的重用性。
+> 2.简化操作
+> 3.减少了编译次数并且减少了和数据库服务器的连接次数，提高了效率。
+> ```
+>
+> 
+
+#### 创建语法
+
+```
+create procedure 存储过程名(参数列表)
+begin
+
+	存储过程体(一组合法有效的sql语句)
+
+end;
+
+注意:
+	1.参数列表包含3部分
+	参数模式   参数名   参数类型
+举例： in      sname   varchar(20)
+参数模式:
+	in：该参数模式可以作为输入(也就是说该参数需要调用方传入值)
+	out：该参数模式可以作为输出(也就是说该参数只可以作为返回值)
+	inout：该参数模式可以作为输入也可以作为输出(也就是说该参数既可以作为传入值也可以作为返回值)
+	
+	2.如果存储过程体 里面只有一句话 那么，begin end;可以省略
+	  存储过程体重每一条sql语句的结尾要求必须加分号。
+	  存储过程结果可以使用delimiter 重新设置
+	  语法：
+	  	delimiter 结束标记
+	  案例:
+	  	delimiter $
+```
+
+#### 调用语法
+
+```
+call 存储过程名(实参列表);
+
+空参列表的存储过程：
+示例：
+	创建：
+        create procedure guocheng_1()
+        begin
+            insert into student(id,name,sex,age)
+            values('1','李晓钰','男','22');
+        end $
+	调用：
+		call guocheng_1()$
+```
+
+> 参数模式 in：参数模式可以作为输入
+>
+> ```
+> 参数模式不写默认是in
+> 示例1：
+> 	创建：
+>         create procedure guocheng_1(in agentcode varchar(20))
+>         begin
+>             select name from  laagent where agentcode = agentcode;
+>         end $
+> 	调用：
+>     	call guocheng_1('1231212121')$
+> 示例2：
+> 	创建：
+> 		create procedure guocheng_1(in agentcode varchar(20),in ssex varchar(10))
+>         begin
+>         	declare ssname varchar(10) default '0';
+>             select 
+>             	name into ssname 
+>             from  
+>             	laagent 
+>             where agentcode = agentcode and sex = ssex;
+>             
+>             select if(ssname<>0,ssname,'没有查到数据');
+>             -- 调用存储过程以后 就会打印查询出的值
+>             
+>         end $
+> 	调用：
+>     	call guocheng_1('1231212121','0')$
+> ```
+>
+> 
+
+> 参数模式out:该参数只可以作为返回值
+>
+> ```
+> 示例1：
+> 	创建：
+>         create procedure guocheng_1(in agentcode varchar(20),out ssex varchar(10))
+>         begin
+>             select 
+>             	name into ssex 
+>             from  
+>             	laagent 
+>             where agentcode = agentcode;          
+>         end $
+> 	调用：
+> 		第一种：
+>             call guocheng_1('1231212121',@bname)$
+>             select @bname$
+>         第二种：
+>         	set @bname$  -- 定义一个变量
+>         	call guocheng_1('1231212121',@bname)$
+>         	select @bname$
+> ```
+>
+> 
+
+> 参数模式inout：该参数模式可以作为输入也可以作为输出
+>
+> ```
+> 示例1：
+> 	创建：
+>         create procedure guocheng_1(inout a int,inout b int)
+>         begin
+>             set a = a*2;
+>             set b = b*2;
+>         end $
+> 	调用：
+> 	  在此过程中首先得创建两个变量
+> 		set @m = 10;
+> 		set @n = 20;
+> 	  然后传入存储过程
+> 		call guocheng_1(@m,@n)$
+> 	  其次进行查询返回的内容
+> 		select @m,@n;
+> ```
+>
+> 
+
+
+
+#### 删除存储过程
+
+```
+语法：存储过程一次只能删除一个
+	drop procedure 存储过程名
+```
+
+
+
+#### 查看存储过程的信息
+
+```
+查看表的信息的时候我们会用到
+	desc 表名;
+查看存储过程desc是不管用的这里要用到
+	show create procedure 存储过程名;
+```
+
+#### 修改存储过程
+
+```
+修改存储过程sql语句是不支持修改的。可以使用数据库常用的工具进行修改例如:navicat。
+```
+
+
+
+### 函数
+
+```
+1.提高代码的重用性。
+2.简化操作
+3.减少了编译次数并且减少了和数据库服务器的连接次数，提高了效率。
+```
+
+> 函数和存储过程的区别
+>
+> ```
+> 存储过程：可以没有返回值，也可以有多个返回值。 
+> 使用场景：适合做批量插入,更新。
+> 	
+> 函数：有且只有一个返回值。
+> 使用场景:适合做处理数据后返回一个结果。
+> ```
+>
+> 
