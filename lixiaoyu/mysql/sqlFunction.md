@@ -298,3 +298,76 @@ call 存储过程名(实参列表);
 > ```
 >
 > 
+
+#### 创建语法
+
+> 注意：
+>
+> ​	1.参数列表包含两个部分： 参数名  参数类型
+>
+> ​	2.函数体：一定会有return。没有会报错。建议放在最后面。
+>
+> ​	3.函数体中仅一句话，可以省略 begin end
+>
+> ​    4.使用delimiter语句设置结束标记。
+
+```
+create function 函数名(参数列表) return 返回值类型
+begin
+	函数体
+end;
+```
+
+#### 调用语法
+
+```
+select 函数名(参数列表);
+```
+
+#### 案例
+
+```
+案例一：
+	无参有返回值
+		create function demo() return int
+		begin
+			declare num int default 0;
+			
+			select 
+				count(*) into num
+			from
+				laagent;
+			return num;
+		end $   ($ 是结束语)
+		
+		select demo()$
+案例二：
+	有参有返回值
+		create function demo2(name varchar(20)) return double
+		begin
+			set @money = 0; -- 定义用户变量
+			select 
+				money into @money
+			from
+				laorderinfo
+			where  username = name;
+			return @money;
+		end $
+		
+		select demo2('lixiaoyu') $
+```
+
+
+
+#### 查看函数
+
+```
+show create function 函数名;
+```
+
+#### 删除函数
+
+```
+drop function 函数名;
+```
+
