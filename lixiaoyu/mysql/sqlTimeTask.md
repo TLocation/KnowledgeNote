@@ -43,26 +43,26 @@ SET GLOBAL event_scheduler = OFF;
 
 ```
 CREATE
-    [DEFINER = { user | CURRENT_USER }]
+    [DEFINER = { user | CURRENT_USER }] -- DEFINER: 定义事件执行的时候检查权限的用户。
     EVENT
     [IF NOT EXISTS]
-    event_name
-    ON SCHEDULE schedule
-    [ON COMPLETION [NOT] PRESERVE]
-    [ENABLE | DISABLE | DISABLE ON SLAVE]
-    [COMMENT 'comment']
+    event_name   -- 事件名
+    ON SCHEDULE schedule     -- ON SCHEDULE schedule: 定义执行的时间和时间间隔。
+    [ON COMPLETION [NOT] PRESERVE] -- ON COMPLETION [NOT] PRESERVE: 定义事件是一次执行还是永久执行，默认为一次执行，即NOT PRESERVE。
+    [ENABLE | DISABLE | DISABLE ON SLAVE]  -- ENABLE | DISABLE | DISABLE ON SLAVE: 定义事件创建以后是开启还是关闭，以及在从上关闭。如果是从服务器自动同步主上的创建事件的语句的话，会自动加上DISABLE ON SLAVE。
+    [COMMENT 'comment']  -- COMMENT 'comment': 定义事件的注释。
     DO event_body;
+    
     schedule:
-        AT timestamp [+ INTERVAL interval] ... | EVERY interval  [STARTS timestamp [+ INTERVAL interval] ...] [ENDS timestamp [+ INTERVAL interval] ...]
-    interval:
-        quantity {YEAR | QUARTER | MONTH | DAY | HOUR | MINUTE | WEEK | SECOND | YEAR_MONTH | DAY_HOUR | AY_MINUTE |DAY_SECOND | HOUR_MINUTE | HOUR_SECOND | MINUTE_SECOND}
+        AT timestamp [+ INTERVAL interval] ... | EVERY interval  开始[STARTS timestamp [+ INTERVAL interval] ...] 结束[ENDS timestamp [+ INTERVAL interval] ...]
+        【AT timestamp】一般用于只执行一次，一般使用时可以使用当前时间加上延后的一段时间，例如：AT CURRENT_TIMESTAMP + INTERVAL 1 HOUR。也可以定义一个时间常量，例如：AT '2006-02-10 23:59:00';
+        【EVERY interval】一般用于周期性执行，可以设定开始时间和结束时间。
         
-参数详细说明：
-DEFINER: 定义事件执行的时候检查权限的用户。
-ON SCHEDULE schedule: 定义执行的时间和时间间隔。
-ON COMPLETION [NOT] PRESERVE: 定义事件是一次执行还是永久执行，默认为一次执行，即NOT PRESERVE。
-ENABLE | DISABLE | DISABLE ON SLAVE: 定义事件创建以后是开启还是关闭，以及在从上关闭。如果是从服务器自动同步主上的创建事件的语句的话，会自动加上DISABLE ON SLAVE。
-COMMENT 'comment': 定义事件的注释。
+    interval:
+        quantity {YEAR (年) | QUARTER(季度) | MONTH(月) | DAY(日) | HOUR(时) | MINUTE(分) | WEEK(周) | SECOND (秒)| YEAR_MONTH (年月)| DAY_HOUR() | AY_MINUTE() |DAY_SECOND ()| HOUR_MINUTE() | HOUR_SECOND() | MINUTE_SECOND()}
+        
+        
+
 ```
 
 
@@ -94,32 +94,55 @@ DROP EVENT [IF EXISTS] event_name(事件名称)
 ### 事件案例
 
 ```
-CREATE TABLE `test` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `t1` datetime DEFAULT NULL,
-  `id2` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8
- 
-<!-- 创建一个每隔3秒往test表中插入一条数据的事件 -->
-CREATE EVENT IF NOT EXISTS e_test_1 ON SCHEDULE EVERY 3 SECOND
-ON COMPLETION PRESERVE
-DO INSERT INTO test(id,t1) VALUES(NULL,NOW());
-<!-- 创建一个10分钟后清空test表数据的事件  -->
-CREATE EVENT IF NOT EXISTS e_test_2
-ON SCHEDULE
-AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
-DO TRUNCATE TABLE test;
-<!-- 调用存储过程 -->
-1、创建过程
-CREATE PROCEDURE pro_test()
+案例1：
+    CREATE TABLE `test` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `t1` datetime DEFAULT NULL,
+      `id2` int(11) NOT NULL DEFAULT '0',
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8
+
+    <!-- 创建一个每隔3秒往test表中插入一条数据的事件 -->
+    CREATE EVENT IF NOT EXISTS e_test_1   -- 如果不存在就创建事件
+    ON SCHEDULE EVERY 3 SECOND		-- 永久执行  3秒执行一次
+    ON COMPLETION PRESERVE         -- on completion [not] preserve 不加not是指永久执行，默认加not 只执行一次
+    DO INSERT INTO test(id,t1) VALUES(NULL,NOW());
+
+
+案例2：
+    <!-- 创建一个1分钟后清空test表数据的事件  -->
+	CREATE EVENT IF NOT EXISTS e_test_2   -- 如果不存在就创建事件
+	ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE   -- 定义执行时间 at current_timestamp 一般用作只执行一次 (当前时间 + 1分钟 )
+	DO TRUNCATE TABLE test;   -- truncate 删除数据
+
+
+案例3：
+	<!-- 调用存储过程 -->
+	1、创建过程
+	CREATE PROCEDURE pro_test()  -- 创建存储过程
     BEGIN
-        INSERT INTO test(id,t1,id2) VALUES(NULL,NOW(),'1000000');
+        INSERT INTO test(id,t1,id2) VALUES(NULL,NOW(),'1000000'); -- 过程体内容 添加表内容
     END
-2、调用过程
-CREATE EVENT IF NOT EXISTS e_test_3 ON SCHEDULE EVERY 3 SECOND
-ON COMPLETION PRESERVE
-DO CALL pro_test();
+	2、调用过程
+	CREATE EVENT IF NOT EXISTS e_test_3 -- 如果不存在就创建事件
+	ON SCHEDULE EVERY 3 SECOND   -- 3秒执行一次 every 周期性执行
+	ON COMPLETION PRESERVE   -- ON COMPLETION [NOT] PRESERVE 加not是只执行一次，这句话不写默认只执行一次
+	DO CALL pro_test();  -- 执行存储过程
+    
+    
+案例4：    
+    <!--  5天后开启每天定时清空test表： -->
+        CREATE EVENT e_test   -- 创建事件
+        ON SCHEDULE EVERY 1 DAY  -- 每天执行(every 代表周期性)
+        STARTS CURRENT_TIMESTAMP + INTERVAL 5 DAY  -- (STARTS 开始)(CURRENT_TIMESTAMP: 当前时间)(INTERVAL 5 DAY: 5天)
+        DO TRUNCATE TABLE test.aaa;   -- (TRUNCATE ： 删除数据)
+
+案例5：
+    <!-- 每天定时清空test表，5天后停止执行： -->
+        CREATE EVENT e_test			-- 创建事件
+        ON SCHEDULE EVERY 1 DAY		-- 每天执行(every 代表周期性)
+        ENDS CURRENT_TIMESTAMP + INTERVAL 5 DAY	-- (ENDS 结束)(CURRENT_TIMESTAMP: 当前时间)(INTERVAL 5 DAY: 5天)
+        DO TRUNCATE TABLE test.aaa; -- (TRUNCATE ： 删除数据)
 ```
 
 
