@@ -11,7 +11,7 @@ event根据计划执行特定的操作，语句可以使begin...end。event可�
 ### 查看数据库事件是否开启
 
 ```
-SELECT @@event_scheduler; 
+SELECT @@event_scheduler;      OFF 关闭  默认是关闭的      on 启动
  
 SHOW VARIABLES LIKE 'event_scheduler';
 ```

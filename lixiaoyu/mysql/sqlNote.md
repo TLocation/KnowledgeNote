@@ -690,6 +690,89 @@ create table 新表 select *  from  复制的表
 
 ```
 
+## DCL管理用户并对用户进行授权
+
+#### 管理用户
+
+> 1.查询用户
+>
+> ```
+> 1.首先切换mysql数据库
+> 	use mysql
+> 2.查询user表
+> 	select * from user
+> 	百分号 % 可以在任意主机使用用户登录数据库
+> ```
+
+> 2.创建用户
+>
+> ```
+> create user '用户名'@'主机名' identified by '密码';
+> 
+> 例如:
+> 	create user 'lixiaoyu'@'localhost' identified by '123123';
+> 	
+> 	create user 'lixiaoyu'@'%' identified by '123123';
+> ```
+
+> 删除用户
+>
+> ```
+> drop user '用户名'@'主机名';
+> ```
+
+> 修改用户
+>
+> ```
+> 1.修改用户密码
+> 	update user set password = password('新密码') where user = '用户名'; -- password()加密函数
+> 2.修改用户密码
+> 	set password for '用户名'@‘主机名’ = password('新密码');
+> 
+> 3.假如忘记root用户的密码。
+> 	1.cmd -- > net stop mysql  停止mysql服务(需要管理员权限)
+> 	2.使用无验证方式启动mysql：mysql --skip-grant-tables
+> 	3.打开新的cmd窗口 直接输入 mysql 回车 就直接登录了
+> 	4.use mysql    使用mysql数据库
+> 	5.update user set password = password('你的root新密码') where user = 'root';
+> 	6.关闭2个cmd窗口
+> 	7.打开任务管理器，手动结束 mysqld.exe的进程
+> 	8.启动mysql的服务
+> 	9.使用新密码登录
+> ```
+>
+> 
+
+#### 权限管理
+
+> 查询权限
+>
+> ```
+> show grants for '用户名'@'主机名';
+> ```
+
+> 授予权限
+>
+> ```
+> grant 权限列表 on 数据库名.表名 to '用户名'@'主机名';
+> 
+> 例如：
+> 	grant select,delete,update,insert on xg.laagent to 'xg'@'localhost';
+> 	
+> 	
+> 	grant all on *.* to 'xg'@'localhost';    -- 给xg用户授权所有权限，在任意数据库任意表上
+> ```
+
+> 撤销权限
+>
+> ```
+> revoke 权限列表 on 数据库名.表名 from '用户名'@'主机名';
+> 
+> revoke update on xg.laagent from 'xg'@'localhost';  -- 撤销掉用户xg在xg数据库中的laagent表中的修改权限。
+> ```
+>
+> 
+
 ## 常见的数据类型
 
 ```
