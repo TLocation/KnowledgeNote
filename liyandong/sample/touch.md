@@ -26,52 +26,35 @@ Android将触摸事件统一封装成MontionEvent类，以Down事件开始，Up�
 
 在dispatchTouchEvent方法中调用，用来处理点击事件。返回ture则意味事件被消费。
 
-#### 从哪儿开始发事件？
+**点击事件（`Touch`事件）**
 
-Activity。
-产生事件最先会交给Activity，再依次向下传递。
+定义
+当用户触摸屏幕时（`View` 或 `ViewGroup`派生的控件），将产生点击事件（`Touch`事件）
 
-//Activity
-public boolean dispatchTouchEvent(MotionEvent ev) {
-  if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-    *//空实现*
-    onUserInteraction();
-  }
-  if (getWindow().superDispatchTouchEvent(ev)) {
-    return true;
-  }
-  return onTouchEvent(ev);
-}
+事件类型 ： MotionEvent.ACTION_DOWN     MotionEvent.ACTION_UP   MotionEvent.ACTION_MOVE  MotionEvent.ACTION_CANCEL
 
-//DecorView
+具体动作   ： 按下View（所有事件的开始） 抬起View（与DOWN对应）   滑动View   结束事件（非人为原因）
 
-public boolean superDispatchTouchEvent(MotionEvent event) {
+### 事件分发的本质
 
-  return super.dispatchTouchEvent(event);
-}
+**将点击事件（MotionEvent）传递到某个具体的`View` & 处理的整个过程**
 
-//PhoneWindow
+### 事件在哪些对象之间进行传递？
 
-@Override
-public boolean superDispatchTouchEvent(MotionEvent event) {
-  return mDecor.superDispatchTouchEvent(event);
-}
+**Activity、ViewGroup、View**
 
-Activity会将事件传递给Window，window又会向下继续传递。如果最终都没有View消费事件(superDispatchTouchEvent返回false)，则Activity会自己调用onTouchEvent()方法处理事件。
+![img](https://upload-images.jianshu.io/upload_images/944365-02c588300f6ad741.png?imageMogr2/auto-orient/strip|imageView2/2/w/590/format/webp)
 
-ViewGroup的dispatchTouchEvent()方法会先判断自己是否要拦截当前事件，是否拦截的作用在于，是自己处理事件，还是要将事件传递下去。即intercepted为true自己处理，为false则寻找子View向下传递。当然如果没有符合传递要求的子View，事件还是会由当前View自己处理。
+### 事件分发的顺序
 
-ViewGroup，挑选传递事件的子View要符合两个条件:
+即 事件传递的顺序：`Activity` -> `ViewGroup` -> `View`
 
-**可见状态**
-**事件的坐标在子View范围**
+### 事件分发过程由哪些方法协作完成？
 
-符合这两个条件,则调用dispatchTransformedTouchEvent()方法把事件传递给子View。
+**dispatchTouchEvent() 、onInterceptTouchEvent()和onTouchEvent()**
 
-dispatchTransformedTouchEvent()方法
+![img](https://upload-images.jianshu.io/upload_images/944365-7c6642f518ffa3d2.png?imageMogr2/auto-orient/strip|imageView2/2/w/675/format/webp)
 
-当子View为null时调用View的dispatchTouchEvent()传递事件，意味当前View自己处理事件。child不为null的情况下，则调用child的dispatchTouchEvent()把事件交给子View。
+### Activity的事件分发机制
 
-View和ViewGroup不同，View的dispatchTouchEvent()方法，意味将准备开始处理事件了。
-
-如果我们给View设置了onTouchListener监听器，则优先会回调Listener的onTouch()方法。如果onTouch()方法返回了false,则还是会执行onTouchEvent()方法
+当一个点击事件发生时，事件最先传到`Activity`的`dispatchTouchEvent()`进行事件分发
