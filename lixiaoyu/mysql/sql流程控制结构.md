@@ -48,7 +48,7 @@
 >     	when money > 60 then select '我很爱你';
 >     	when money > 80 then select '爱你';
 >     	else select 'ddddd';
->     	end case';
+>     	end case;
 >     end $
 >     
 >     call test_demo(50)$
