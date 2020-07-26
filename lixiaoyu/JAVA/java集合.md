@@ -74,19 +74,19 @@
 
 ## 集合
 
-Collection 接口：
+###### Collection 接口：
 
 
 
-Map 接口：
+###### Map 接口：
 
 
 
-Iterator 迭代：
+###### Iterator 迭代：
 
 
 
-工具类：
+###### 工具类：
 
 ​	Collections：
 
@@ -100,9 +100,9 @@ Iterator 迭代：
 
 
 
+### ArrayList 
 
-
-###### ArrayList
+###### 本质就是动态数组,动态扩容
 
 ```
 	/**
@@ -153,7 +153,246 @@ Iterator 迭代：
 >     }
 > ```
 >
-> 
+
+##### add添加源码分析
+
+###### 第一次添加
+
+```
+public boolean add(E e) {
+		//确定容量  动态扩容  size初始0 
+        ensureCapacityInternal(size + 1);  // ensureCapacityInternal(1);
+        //将 要添加的元素添加到数组中   
+        elementData[size++] = e;
+        return true;
+    }
+```
+
+```
+private void ensureCapacityInternal(int minCapacity) { //1
+		//ensureExplicitCapacity(10)
+        ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+ }
+ 
+//elementData {} 为空    mincapacity为1
+private static int calculateCapacity(Object[] elementData, int minCapacity) {
+        //如果elementdata == {}空
+        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+        	//DEFAULT_CAPACITY 默认10
+        	//返回下面2个参数的最大值
+            return Math.max(DEFAULT_CAPACITY, minCapacity);
+        }
+        //不等于空返回
+        return minCapacity;
+ }
+
+```
+
+```
+private void ensureExplicitCapacity(int minCapacity) { //10
+        modCount++; // 自增长
+
+        // 10 - 0
+        if (minCapacity - elementData.length > 0)
+            grow(minCapacity);
+    }
+```
+
+```java
+private void grow(int minCapacity) { // 10
+        // oldCapacity 0
+        int oldCapacity = elementData.length; // 0
+    	//newCapacity 0
+        int newCapacity = oldCapacity + (oldCapacity >> 1);// 向右移动一位
+        // 0 - 10 
+    	if (newCapacity - minCapacity < 0)
+            //newCapacity 10
+            newCapacity = minCapacity;
+        if (newCapacity - MAX_ARRAY_SIZE > 0)
+            newCapacity = hugeCapacity(minCapacity);
+        // 返回一个新的长度数组
+    	//elementData {} 付给了 newCapacity {,,,,,,,,,}
+        elementData = Arrays.copyOf(elementData, newCapacity);
+}
+```
+
+
+
+###### 第二次添加
+
+```java
+public boolean add(E e) {
+        ensureCapacityInternal(size + 1);  // 2
+        elementData[size++] = e;
+        return true;
+}
+```
+
+```java
+private void ensureCapacityInternal(int minCapacity) { // 2
+    	// ensureExplicitCapacity(10,2)
+        ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+}
+
+private static int calculateCapacity(Object[] elementData, int minCapacity) {
+    	// 10 == {}
+        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+            return Math.max(DEFAULT_CAPACITY, minCapacity);
+        }
+    	//无效返回 2
+        return minCapacity;
+    }
+```
+
+```java
+private void ensureExplicitCapacity(int minCapacity) { //2
+        modCount++;
+
+        // 2 - 10 不成立 继续往下执行
+        if (minCapacity - elementData.length > 0)
+            grow(minCapacity);
+    }
+
+```
+
+```java
+public boolean add(E e) { 
+        ensureCapacityInternal(size + 1);  // 2
+        elementData[size++] = e; // elementData[2] = e;
+        return true;
+    }
+```
+
+
+
+###### 第11次添加
+
+```java
+public boolean add(E e) {
+        ensureCapacityInternal(size + 1);  // 12
+        elementData[size++] = e;
+        return true;
+    }
+
+```
+
+```java
+private void ensureCapacityInternal(int minCapacity) { //12
+        ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+    }
+
+//参数是     10 12
+private static int calculateCapacity(Object[] elementData, int minCapacity) { 
+        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+            return Math.max(DEFAULT_CAPACITY, minCapacity);
+        }
+    	//返回12
+        return minCapacity;
+    }
+```
+
+```java
+private void ensureExplicitCapacity(int minCapacity) { //12
+        modCount++;
+
+        // 12 - 10  > 0
+        if (minCapacity - elementData.length > 0)
+            grow(minCapacity);
+    }
+
+private void grow(int minCapacity) { //12
+        // oldCapacity 10
+        int oldCapacity = elementData.length;
+        int newCapacity = oldCapacity + (oldCapacity >> 1); // 10 + 5
+    	// 15 - 10
+        if (newCapacity - minCapacity < 0)
+            newCapacity = minCapacity;
+    	// MAX_ARRAY_SIZE 是指integer的最大值  这个地方始终都是小于0
+        if (newCapacity - MAX_ARRAY_SIZE > 0)
+            newCapacity = hugeCapacity(minCapacity);
+        //elementData 10 {1,2,3,4,5,6,7,8,9,10}
+    	//newCapacity 15 {1,2,3,4,5,6,7,8,9,10,,,,,}
+    	//也就是在原来的基础上复制到另一个新的数组中
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+
+public boolean add(E e) {
+        ensureCapacityInternal(size + 1);  // 12
+        elementData[size++] = e; elementData[12] = e;
+        return true;
+    }
+
+```
+
+
+
+##### get获取源码分析
+
+```java
+public E get(int index) { // 1
+    	//检查下标是否合法
+        rangeCheck(index);
+		
+    	//返回指定下标处的数据
+        return elementData(index);
+    }
+
+private void rangeCheck(int index) {
+        if (index >= size) // 下标如果大于 长度
+            //就抛出异常索引越界
+            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+    }
+```
+
+
+
+##### set获取源码分析
+
+```java
+// 下标为1     数据 11
+public E set(int index, E element) { // 1   11
+    //检查下标是否合法 否则抛出索引越界    
+    rangeCheck(index);
+		//获取到索引处数据
+        E oldValue = elementData(index);
+    	//把索引处数据进行赋值
+        elementData[index] = element;
+    	//返回原来的数据
+        return oldValue;
+    }
+```
+
+
+
+##### remove获取源码分析(数组长度不变)
+
+```java
+public E remove(int index) { // 1
+        //检查索引是否合法
+    	rangeCheck(index);
+
+        modCount++;
+    	//获取到索引处数据
+        E oldValue = elementData(index);
+		//15 - 1 - 1 = 13
+        int numMoved = size - index - 1;
+    	//13 > 0
+        if (numMoved > 0)
+            //源数组{1,2,3,4,5,6,7,8,9}
+            //目标数组{1,3,4,5,6,7,8,9,null}
+            //这边有一个这样的操作 就是覆盖掉了
+            // 源数组  开始下标   目标数组 开始下标  长度
+            System.arraycopy(elementData, index+1, elementData, index,
+                             numMoved);
+        elementData[--size] = null; // 把原来的数组 下标为 14的赋值为null
+		//返回删除的数据
+        return oldValue;
+    }
+```
+
+
+
+
 
 > 有参构造
 >
@@ -176,52 +415,4 @@ Iterator 迭代：
 > 
 
 
-
-#### add方法源码分析
-
-```
-public boolean add(E e) {
-		//确定容量  动态扩容  size初始0 
-        ensureCapacityInternal(size + 1);  // Increments modCount!!
-        //将 要添加的元素添加到数组中   
-        elementData[size++] = e;
-        return true;
-    }
-```
-
-```
-private void ensureCapacityInternal(int minCapacity) {
-		// 如果等于 空
-        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
-        	// mincapacity 就取 下面两个值的最大值  
-            minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
-        }
-
-        ensureExplicitCapacity(minCapacity);
-    }
-```
-
-```
-private void ensureExplicitCapacity(int minCapacity) {
-        modCount++;  //自增长  操作次数
-
-        // overflow-conscious code
-        if (minCapacity - elementData.length > 0)
-            grow(minCapacity);
-    }
-```
-
-```
-private void grow(int minCapacity) {  // 10
-        // overflow-conscious code
-        int oldCapacity = elementData.length;//0
-        int newCapacity = oldCapacity + (oldCapacity >> 1);//0+0
-        if (newCapacity - minCapacity < 0)
-            newCapacity = minCapacity;
-        if (newCapacity - MAX_ARRAY_SIZE > 0)
-            newCapacity = hugeCapacity(minCapacity);
-        // 返回一个新的数组  
-        elementData = Arrays.copyOf(elementData, newCapacity);
-    }
-```
 
