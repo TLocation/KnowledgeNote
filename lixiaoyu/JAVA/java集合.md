@@ -1,5 +1,23 @@
 # 数据结构
 
+###### 十进制转二进制
+
+![1595867838201](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595867838201.png)
+
+###### 二进制转10进制
+
+![1595868021125](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595868021125.png)
+
+
+
+\>>表示右移，如果该数为正，则高位补0，若为负数，则高位补1；
+
+\>>>表示无符号右移，也叫逻辑右移，即若该数为正，则高位补0，而若该数为负数，则右移后高位同样补0。
+
+
+
+
+
 ## 数组
 
 > ```
@@ -391,6 +409,90 @@ public E remove(int index) { // 1
 ```
 
 
+
+##### FailFast机制
+
+​	快速失败的机制，java集合类为了应对并发访问在集合迭代过程中，内部结构发生变化的一种防护措施，这种错误检查的机制为这种可能发生错误通过抛出java.util.ConcurrentModificationException .
+
+实例：
+
+```java
+// 创建2个线程类
+public class ThreadIterator extends Thread {
+
+    private List list;
+
+    public ThreadIterator(List list){
+        this.list = list;
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            for (Iterator iteratorTmp = list.iterator();iteratorTmp.hasNext();){
+                iteratorTmp.next();
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
+
+public class ThreadAdd extends Thread{
+
+    private List list;
+
+    public ThreadAdd(List list){
+        this.list = list;
+    }
+
+
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 100 ; i++){
+            System.out.println("循环执行"+i);
+            try {
+                Thread.sleep(5);
+                list.add(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+```
+
+```java
+//测试类
+public class JavaTest {
+
+    private static List list = new ArrayList();
+
+    public static void main(String[] args) {
+        
+        new ThreadIterator(list).start();
+        new ThreadAdd(list).start();
+
+    }
+}
+
+```
+
+![1595866443956](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866443956.png)
+
+![1595866558512](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866558512.png)
+
+![1595866582549](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866582549.png)
+
+![1595866618760](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866618760.png)
+
+2条线程导致 modCount != expectedModCount 就会报错
 
 
 
