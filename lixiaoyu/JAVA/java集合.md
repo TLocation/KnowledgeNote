@@ -96,31 +96,15 @@
 
 
 
-###### Map 接口：
 
 
 
-###### Iterator 迭代：
 
-
-
-###### 工具类：
-
-​	Collections：
-
-​	Arrays：
-
-
-
-比较器：
-
-​	Comparable  Comparator
-
-
+## List接口
 
 ### ArrayList 
 
-###### 本质就是动态数组,动态扩容
+> 本质就是动态数组,动态扩容
 
 ```
 	/**
@@ -174,7 +158,7 @@
 
 ##### add添加源码分析
 
-###### 第一次添加
+> 第一次添加
 
 ```
 public boolean add(E e) {
@@ -234,9 +218,7 @@ private void grow(int minCapacity) { // 10
 }
 ```
 
-
-
-###### 第二次添加
+> 第二次添加
 
 ```java
 public boolean add(E e) {
@@ -281,9 +263,7 @@ public boolean add(E e) {
     }
 ```
 
-
-
-###### 第11次添加
+> 第11次添加
 
 ```java
 public boolean add(E e) {
@@ -514,7 +494,213 @@ public class JavaTest {
 >     }
 > ```
 >
+
+
+
+#### LinkedList
+
+LinkedList是通过双向链表去实现的。他的数据结构具有双向链表的优缺点，既然是双向链表，那么他的顺序访问效率会非常高，而且随机访问的效率会比较低，它包含一个非常重要的私有内部静态类：node；
+
+```java
+private static class Node<E> {
+        E item;//节点的元素
+        Node<E> next;//下一个节点
+        Node<E> prev;//上一个节点
+
+        Node(Node<E> prev, E element, Node<E> next) {
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+```
+
+```java
+public void push(E e) { //push往链表的头部去加
+        addFirst(e);
+    }
+
+public void addFirst(E e) {
+        linkFirst(e);
+    }
+
+private void linkFirst(E e) {
+        final Node<E> f = first; //头部
+        final Node<E> newNode = new Node<>(null, e, f);//把我们的数据e放在头部
+        first = newNode;
+        if (f == null)
+            last = newNode;
+        else
+            f.prev = newNode;
+        size++;
+        modCount++;
+    }
+```
+
+```java
+public void add(int index, E element) { //add 从尾部去加
+        checkPositionIndex(index);
+
+        if (index == size)
+            linkLast(element);
+        else
+            linkBefore(element, node(index));
+    }
+
+void linkLast(E e) {
+        final Node<E> l = last;
+        final Node<E> newNode = new Node<>(l, e, null);
+        last = newNode;
+        if (l == null)
+            first = newNode;
+        else
+            l.next = newNode;
+        size++;
+        modCount++;
+    }
+
+```
+
+
+
+get方法:本质上还是便利
+
+```java
+public E get(int index) {//获取对应下标的值
+        checkElementIndex(index);
+        return node(index).item;
+    }
+    
+Node<E> node(int index) {
+        // assert isElementIndex(index);
+
+        if (index < (size >> 1)) {//如果index < 长度的一般
+            Node<E> x = first; //从头开始循环
+            for (int i = 0; i < index; i++)
+                x = x.next;
+            return x;
+        } else {
+            Node<E> x = last; // 从尾部开始循环
+            for (int i = size - 1; i > index; i--)
+                x = x.prev;
+            return x;
+        }
+    }
+```
+
+set方法：
+
+```java
+public E set(int index, E element) {
+        checkElementIndex(index);//检查下标是否合法
+        Node<E> x = node(index);//根据下标获取node对象
+        E oldVal = x.item;//记录原来的值
+        x.item = element;//赋予新的值
+        return oldVal;//返回修改之前的值
+    }
+```
+
+#### Vector
+
+和ArrayList很相似，都是以动态数组的形式存储数据。
+
+vector是线程安全的。
+
+每个方法都有加synchronized关键字所修饰。对性能有比较大的影响慢慢就被淘汰了。
+
+
+
+Collections
+
+```java
+collecitons中的synchronized可以增加代码的灵活度，需要同步的时候就通过下面的代码实现
+
+List list1 = Collections.synchronizedList(list);
+
+```
+
+
+
+## set接口
+
+### 1.HashSet
+
+>概述:
+>
+>​		HashSet 实现set接口，由哈希表支持，他不保证set的迭代顺序，特别是他不保证该顺序永久不变。允许使用null作为元素。
+>
+>特点:
+>
+>​		底层数据结构是哈希表，HashSet的本质是一个“没有重复元素的集合”，他是通过`HashMap`实现的HashSet中包含一个HashMap类型的成员变量`map`.
+
+```java
+private transient HashMap<E,Object> map; //成员变量map
+
+public HashSet() {//无参构造器
+        map = new HashMap<>();
+    }
+
+```
+
+
+
+add方法：本质上试讲数据保持在HashMap中，key是我们添加的内容，value就是我们定义的一个object对象。
+
+```java
+public boolean add(E e) {
+        return map.put(e, PRESENT)==null;
+    }
+```
+
+
+
+
+
+### 2.TreeSet
+
+> 概述：
+>
+> ​		基于TreeMap的NavigableSet实现，使用元素的自然顺序进行排序，后者根据创建set时提供的Comparator进行排序，具体取决于使用的构造方法。
+>
 > 
+>
+> 本质是将数据保存在TreeMap中，key是我们添加的内容，value是定义的一个object对象。
+
+```java
+public TreeSet() {
+        this(new TreeMap<E,Object>());
+    }
+```
+
+
+
+## Map 接口：
+
+## Iterator 迭代：
+
+## 工具类：
+
+​	Collections：
+
+​	Arrays：
+
+## 比较器：
+
+​	Comparable  Comparator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
