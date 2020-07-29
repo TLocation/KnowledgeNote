@@ -86,7 +86,7 @@
 >
 > 
 
-
+![1596063769934](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1596063769934.png)
 
 
 
@@ -675,6 +675,195 @@ public TreeSet() {
 
 
 ## Map 接口：
+
+> Map集合的特点：
+>
+> ​	1.能够存储唯一的列的数据key(唯一不可重复)set
+>
+> ​	2.能够存储可以重复的数据(可重复)List
+>
+> ​	3.值的顺序取决于键的顺序
+>
+> ​	4.键和值都可以存储null元素
+
+### TreeMap
+
+本质上就是红黑树的实现：
+
+````
+1.每个节点要么是红色，要么是黑色。
+
+2.根节点必须是黑色。
+
+3.每个叶子节点【NIL】是黑色。
+
+4.每个红色节点的两个子节点必须是黑色。
+
+5.任意节点到每个叶子节点的路劲包含相同数量的黑节点。
+````
+
+```java
+private transient Entry<K,V> root;  //根节点就是entry对象
+
+
+K key;//键
+V value;//值
+Entry<K,V> left;//左子节点
+Entry<K,V> right;//右子节点
+Entry<K,V> parent;//父节点
+boolean color = BLACK;//节点的颜色  默认黑色
+```
+
+map.put:
+
+```java
+public V put(K key, V value) {
+    	//将root赋值给局部变量  初始为null
+        Entry<K,V> t = root;
+    	//第一次添加 root为空
+        if (t == null) {
+            //初始操作
+            //检测key是否为空
+            compare(key, key); // type (and possibly null) check
+			//将要添加的key.value封装成一个entry对象，并赋值给root
+            root = new Entry<>(key, value, null);
+            size = 1;
+            modCount++;
+            return null;
+        }
+        int cmp;
+        Entry<K,V> parent;//父节点
+        // split comparator and comparable paths
+        Comparator<? super K> cpr = comparator;//获得比较器
+        if (cpr != null) {
+            //一直找到插入节点的父节点
+            do {
+                //将root赋值给parent
+                parent = t;
+                //和root节点比较值的大小
+                cmp = cpr.compare(key, t.key);
+                
+                if (cmp < 0)
+                    //将父节点的左子节点赋值给t
+                    t = t.left;
+                else if (cmp > 0)
+                    //将父节点的右节点赋值给t
+                    t = t.right;
+                else
+                    //直接和父节点的key相等 修改值
+                    return t.setValue(value);
+            } while (t != null);
+        }
+        else {
+            //比较器不存在的情况
+            
+            if (key == null)
+                throw new NullPointerException();
+            @SuppressWarnings("unchecked")
+                Comparable<? super K> k = (Comparable<? super K>) key;
+            do {
+                parent = t;
+                cmp = k.compareTo(t.key);
+                if (cmp < 0)
+                    t = t.left;
+                else if (cmp > 0)
+                    t = t.right;
+                else
+                    return t.setValue(value);
+            } while (t != null);
+        }//t 就是我们要插入节点的父节点 parent
+    
+    //将我们要插入的key value 封装成一个entry对象
+        Entry<K,V> e = new Entry<>(key, value, parent);
+        if (cmp < 0)
+            parent.left = e;//插入节点在父节点左侧
+        else
+            parent.right = e;//插入节点在父节点右侧
+        fixAfterInsertion(e);//实现红黑树的平衡
+        size++;
+        modCount++;
+        return null;
+    }
+```
+
+fixAfterInsertion：实现平衡的方法
+
+```java
+private void fixAfterInsertion(Entry<K,V> x) {
+    //设置添加节点的颜色为红色
+        x.color = RED;
+	//循环的条件 x添加的节点不是空  不是root节点   父节点颜色为红色
+        while (x != null && x != root && x.parent.color == RED) {
+            //父节点 是否 是祖父节点 的左侧节点
+            if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
+                //获取父节点的兄弟节点（叔叔节点）
+                Entry<K,V> y = rightOf(parentOf(parentOf(x)));
+                if (colorOf(y) == RED) { //叔叔节点是红色
+                    //变色
+                    setColor(parentOf(x), BLACK);//设置父节点为黑色
+                    setColor(y, BLACK);//设置叔叔节点的颜色为黑色
+                    setColor(parentOf(parentOf(x)), RED);//设置祖父节点的颜色是红色
+                    x = parentOf(parentOf(x));//将祖父节点设置为插入的节点
+                } else {//叔叔节点是黑色
+                    if (x == rightOf(parentOf(x))) {//判断插入节点是否是父节点的右侧节点
+                        x = parentOf(x);//将父节点作为插入节点
+                        rotateLeft(x);//左旋  进行位置的调整
+                    }
+                    setColor(parentOf(x), BLACK);//设置父节点为黑色
+                    setColor(parentOf(parentOf(x)), RED);//设置祖父节点为红色
+                    rotateRight(parentOf(parentOf(x)));//以祖父节点做右旋
+                }
+            } else {//父节点是祖父节点的右侧子节点
+                //获取叔叔节点
+                Entry<K,V> y = leftOf(parentOf(parentOf(x)));
+                if (colorOf(y) == RED) {//叔叔节点为红色
+                    //变色
+                    setColor(parentOf(x), BLACK);
+                    setColor(y, BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    x = parentOf(parentOf(x));
+                } else {
+                    //插入几点在父节点的右侧
+                    if (x == leftOf(parentOf(x))) {
+                        x = parentOf(x);
+                        rotateRight(x);//右旋操作
+                    }
+                    setColor(parentOf(x), BLACK);
+                    setColor(parentOf(parentOf(x)), RED);
+                    rotateLeft(parentOf(parentOf(x)));//左旋
+                }
+            }
+        }
+    //根节点的颜色为黑色
+        root.color = BLACK;
+    }
+```
+
+
+
+​	
+
+
+
+
+
+
+
+### HashMap
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Iterator 迭代：
 
