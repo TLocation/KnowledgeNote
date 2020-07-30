@@ -240,9 +240,50 @@ group by :select  分组函数(avg,max,count,sum,min)
 
 ```
 
+#### having使用
+
+```mysql
+having可以筛选分组后的各组数据
+示例：
+    -- 查询每个工资大于2000的事业部的工资
+	select sum(money) from laagent group by managecom having sum(money) > 2000;
+	
+having也可以单独使用
+示例：
+	-- 查询工资大于 2000 的人
+	select  *  from  laagent having money > 2000; 
+	#与下面查询的查询结果是一致的 ↓
+	select  * from  laagent where money > 2000;
+	
+```
+
+#### order by使用
+
+```mysql
+#ORDER BY 默认的排序是升序的 asc
+示例：
+	select * from laagent order by agentcode;  #升序
+    select *  from laagent order by agentcode desc;#降序
+    
+    #班级号升序排序，然后再在班内按学号降序排序的操作如下：
+	SELECT * FROM stu ORDER BY Cno,Sno DESC;
+```
+
+#### limit使用
+
+```mysql
+1.limit 可以被用于强制select查询返回的记录数。
+2.limit 语句放在查询语句的最后
+3.select *  from  表 limit 0,5;  -- 0 从下标为0的开始 也就是第一条数据。5 是一页显示5条
+公式： 页数page , 每页的条数size   select * from 表 limit (page-1)*size,size;   
+	
+	例如:每页10条，找第8页
+	limit （8-1）*10,10；
+```
+
 #### exists 和 not exists
 
-```
+```mysql
 -- 表stud1中 存在 stud1中name 和 stud2 中name相等数据的
 select *  from stud1 a where exists (select 1 from stud2 b  where a.name = b.name)
 
@@ -496,19 +537,6 @@ select *  from  laagent a where  nont exists (select 1 from class where pid = a.
 列子查询(结果集只有一列多行)
 行子查询(结果集有一行多列)
 表子查询(结果集一般为多行多列)
-
-```
-
-## 分页 limit
-
-```
-1、limit 语句放在查询语句的最后
-
-2、select *  from  表 limit 0,5;  -- 0 从下标为0的开始 也就是第一条数据。5 是一页显示5条
-公式： 页数page , 每页的条数size   select * from 表 limit (page-1)*size,size;   
-	例如:每页10条，找第8页
-	limit （8-1）*10,10；
-
 
 ```
 
