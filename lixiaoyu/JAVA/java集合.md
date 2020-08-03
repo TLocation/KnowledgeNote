@@ -2,11 +2,11 @@
 
 ###### 十进制转二进制
 
-![1595867838201](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595867838201.png)
+![1595867838201](二进制转十进制.png)
 
 ###### 二进制转10进制
 
-![1595868021125](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595868021125.png)
+![1595868021125](十进制转二进制.png)
 
 
 
@@ -86,7 +86,7 @@
 >
 > 
 
-![1596063769934](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1596063769934.png)
+![1596063769934](红黑树.png)
 
 
 
@@ -492,13 +492,13 @@ public class JavaTest {
 
 ```
 
-![1595866443956](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866443956.png)
+![1595866443956](1595866443956.png)
 
-![1595866558512](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866558512.png)
+![1595866558512](1595866558512.png)
 
-![1595866582549](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866582549.png)
+![1595866582549](1595866582549.png)
 
-![1595866618760](C:\Users\28768\AppData\Roaming\Typora\typora-user-images\1595866618760.png)
+![1595866618760](1595866618760.png)
 
 2条线程导致 modCount != expectedModCount 就会报错
 
