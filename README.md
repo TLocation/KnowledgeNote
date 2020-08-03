@@ -6,9 +6,7 @@
 #### Kotlin
 [kotlin基础](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/kotlin/kotlin%E5%9F%BA%E7%A1%80.md)
 [Kotlin笔记（技巧）owner 李艳东](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/liyandong/kotlin.md)
-[kotlin 基础学习 -张超]
-
-（https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/zhangchao/kotlin%E4%B8%AD%E7%9A%84%E7%B1%BB.md）
+[kotlin 基础学习 -张超](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/zhangchao/kotlin%E4%B8%AD%E7%9A%84%E7%B1%BB.md)
 #### adb
 [adb命令](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/adb/adbnote.md)
 
