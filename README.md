@@ -26,3 +26,8 @@
 [Android9.0及以上网络请求失败解决方案](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/skills/Android9.0%E4%BB%A5%E4%B8%8A%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%A4%B1%E8%B4%A5%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.md)
 
 [Glide4.0加载图片失败解决方案](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/skills/Glide4.0%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.md)
+
+#### 自定义view
+[Canvas Api 基础使用](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/liyandong/liyandong/sample/canvas.md)
+
+[Paint Api 使用总结](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/liyandong/liyandong/sample/paint.md)

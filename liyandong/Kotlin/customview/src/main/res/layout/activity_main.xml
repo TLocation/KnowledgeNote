@@ -7,20 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.example.customview.AuxiliaryView
+    <com.example.customview.PracticeView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        tools:ignore="MissingConstraints" />
-
-    <com.example.customview.SpottedLinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/yh0"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:src="@mipmap/yh2" />
-    </com.example.customview.SpottedLinearLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>
