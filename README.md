@@ -18,7 +18,14 @@
 [http请求字段 响应字段分析](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/http/httpRequestDescription.md)
 
 #### Jetpack
+
+[Lifecycle使用文档(个人分支)](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/lifeycycle.md)
+
 [Lifycycle源码分析](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/jetpack/lifecycleSourceCode.md)
+
+[LiveData使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/liveDataSource.md)
+
+[ViewModel使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/viewmodelSource.md)
 
 [App Startup使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/jetpack/AppStartup.md)
 

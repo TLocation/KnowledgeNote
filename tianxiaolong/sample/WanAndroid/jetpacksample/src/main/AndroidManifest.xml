@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.location.jetpacksample" >
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+<application>
+    <activity android:name=".lifycycle.LifecycleActivity"/>
+    <activity android:name=".livedata.LiveDataActivity"/>
+    <activity android:name=".livedata.LiveDataExtendActivity"/>
+    <activity android:name=".viewmodel.ViewModelActivity"/>
+</application>
+</manifest>
