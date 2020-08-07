@@ -25,7 +25,7 @@
 
 [LiveData使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/liveDataSource.md)
 
-[ViewModel使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/2020/q3/1/tianxiaolong/note/jetpack/viewmodelSource.md)
+[ViewModel使用文档](tianxiaolong/note/jetpack/viewmodelSource.md)
 
 [App Startup使用文档](https://gitee.com/AndroidGrowthNote/KnowledgeNote/blob/master/note/jetpack/AppStartup.md)
 
