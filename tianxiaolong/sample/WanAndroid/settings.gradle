@@ -1,5 +1,0 @@
-include ':customviewmemorysample'
-rootProject.name='WanAndroid'
-include ':app'
-include ':jetpacksample'
-include ':base'

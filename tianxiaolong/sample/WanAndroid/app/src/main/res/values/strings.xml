@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">WanAndroid</string>
-    <string name="btn_lifycycle_sample">生命周期监测组件Lifecycle</string>
-    <string name="btn_livedata_sample">事件监听LiveData</string>
-    <string name="btn_viewmodel_sample">数据获取ViewModel</string>
-    <string name="open_settings">打开配置管理器</string>
-</resources>

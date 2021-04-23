@@ -1,2 +1,0 @@
-include ':app', ':logmodle', ':networkmodle'
-rootProject.name='JetpackStartupDemo'
