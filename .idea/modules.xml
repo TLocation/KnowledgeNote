@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidCode.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AndroidCode.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AndroidCode.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidCode.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidCode.buildSrc.iml" />
     </modules>
   </component>
 </project>
